@@ -315,8 +315,8 @@ function DiceCal(inputStr){
   //寫出算式，這裡使用while將所有「幾d幾」的骰子找出來，一個一個帶入RollDice並取代原有的部分
   while(DiceToRoll.match(/\d+d\d+/)!=null) {
     let tempMatch = DiceToRoll.match(/\d+d\d+/);    
-    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？'};
-    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'不支援D1和超過D500的擲骰；想被淨灘嗎？'};
+    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'指揮官，這裡不支援200D以上擲骰喔'};
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'指揮官，這裡不支援D1和超過D500的擲骰'};
     DiceToRoll = DiceToRoll.replace(/\d+d\d+/, RollDice(tempMatch));
   }
   
@@ -837,16 +837,13 @@ function YabasoReply(inputStr) {
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
     
-    if (rplyArr.length == 1) return '靠腰喔要我選也把選項格式打好好不好，真的想被淨灘嗎？';
+    if (rplyArr.length == 1) return '指揮官連格式都打不好嗎，你還是去死吧';
     
     let Answer = rplyArr[Dice(rplyArr.length)-1];
-    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('鴨霸獸') != null) {
-      rplyArr = ['幹，你不會自己決定嗎',
+    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
+      rplyArr = ['指揮官你還是去死吧',
                  '人生是掌握在自己手裡的',
-                 '隨便哪個都好啦',
-                 '連這種東西都不能決定，是不是不太應該啊',
-                 '沒事別叫我選東西好嗎，難道你們都是天秤座嗎（戰）',
-                 '不要把這種東西交給機器人決定比較好吧'];
+                 '不要把這種事情交給我決定比較好吧'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
     return '我想想喔……我覺得，' + Answer + '。';
@@ -1005,7 +1002,7 @@ function YabasoReply(inputStr) {
   //以下是運勢功能
   if(inputStr.match('運勢') != null){
     let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是，不要知道比較好','這應該不關我的事'];
-    return '運勢喔…我覺得，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
+    return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   } 
   
   //沒有觸發關鍵字則是這個
