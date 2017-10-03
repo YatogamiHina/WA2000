@@ -145,7 +145,7 @@ function parseInput(rplyToken, inputStr) {
 		
 	//這三個是偏向玩鬧型的功能，如果說只是要擲骰可以不管。
         //鴨霸獸指令開始於此
-        if (inputStr.match('鴨霸獸') != null) return YabasoReply(inputStr) ;
+        if (inputStr.match('WA2000') != null) return YabasoReply(inputStr) ;
         else
 
 	//圖片訊息在此
