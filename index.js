@@ -12,7 +12,7 @@ var options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer MuUWEkKwYMdLsrGvB0nltE40Qho1WVsLoCIKLGVX/LJDXmlgQy/zDWGsFaRmVRl+v7lBSu/9UmgAPvupIHpdntCpDTNqeHQK4cIXL5Ti5wydNbuxHFwwV+jAcjE+JteTw6+GYBp35AFtW+nGspk1YgdB04t89/1O/w1cDnyilFU='   
+    'Authorization': 'Bearer ZsIapQNI+JqGYgpPbCniWppC434slHT4H2GOZz5oVwz1CSSqEcRMVjq+Lb9Sd1lwv7lBSu/9UmgAPvupIHpdntCpDTNqeHQK4cIXL5Ti5wwSwxNmwwrwWw3xb9I/eYryPBZLl/hKrVK/aOfXAXvc/gdB04t89/1O/w1cDnyilFU='   
     
   }
 }
@@ -842,7 +842,6 @@ function YabasoReply(inputStr) {
     let Answer = rplyArr[Dice(rplyArr.length)-1];
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
       rplyArr = ['指揮官你還是去死吧',
-                 '人生是掌握在自己手裡的',
                  '不要把這種事情交給我決定比較好吧。'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
