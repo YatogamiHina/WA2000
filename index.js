@@ -641,6 +641,8 @@ function CoC7th(rplyToken, inputStr){
             if (finalRoll <= chack/2) ReStr = ReStr + finalRoll + ' → 困難成功';
           else
             if (finalRoll <= chack) ReStr = ReStr + finalRoll + ' → 通常成功';
+	  else
+            if (finalRoll = 87) ReStr = ReStr + finalRoll + ' → 骰出這個可不是在暗示指揮官呢';
           else  ReStr = ReStr + finalRoll + ' → 失敗' ;
 
           //浮動大失敗運算
