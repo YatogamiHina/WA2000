@@ -630,9 +630,9 @@ function CoC7th(rplyToken, inputStr){
   }  
 
           //結果判定
-          if (finalRoll == 1) ReStr = ReStr + finalRoll + ' → 恭喜！大成功！';
+          if (finalRoll == 1) ReStr = ReStr + finalRoll + ' → 才不是為了指揮官幫你骰大成功呢....哼';
           else
-            if (finalRoll == 100) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
+            if (finalRoll == 100) ReStr = ReStr + finalRoll + ' → 我本人都親自幫你骰了 大失敗?! 那種結果就別在意';
           else
             if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
           else
@@ -652,8 +652,7 @@ function CoC7th(rplyToken, inputStr){
 
   
 	//這是在骰出大成功或大失敗時附加圖片的程式碼，可以自己研究；不想要的話整個刪掉也不影響
-	if (ReStr.match('啊！大失敗')!= null){
-	let fumbleImgArr =['https://i.imgur.com/ju9UQzA.png','https://i.imgur.com/M3meWXu.png','https://i.imgur.com/nWxGZyz.png','https://i.imgur.com/cq0WGxH.png'];
+	if (ReStr.match('我本人都親自幫你骰了 大失敗?! 那種結果就別在意')!= null){
 	let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
 	let fumble = [
 			{
@@ -670,8 +669,7 @@ function CoC7th(rplyToken, inputStr){
 		return undefined;
 	}
 	
-	if (ReStr.match('恭喜！大成功')!= null){
-	let CriImgArr =['https://i.imgur.com/jevHZqa.png'];
+	if (ReStr.match('才不是為了指揮官幫你骰大成功呢....哼')!= null){
 	let CriImg = CriImgArr[Dice(CriImgArr.length)-1];
 	let Cri = [
 			{
