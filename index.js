@@ -634,7 +634,7 @@ function CoC7th(rplyToken, inputStr){
           else
             if (finalRoll == 100) ReStr = ReStr + finalRoll + ' → 我本人都親自幫你骰了 大失敗?! 那種結果就別在意';
           else
-            if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
+            if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 我本人都親自幫你骰了 大失敗?! 那種結果就別在意';
           else
             if (finalRoll <= chack/5) ReStr = ReStr + finalRoll + ' → 極限成功';
           else
