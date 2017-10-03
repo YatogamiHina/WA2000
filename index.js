@@ -315,7 +315,7 @@ function DiceCal(inputStr){
   //寫出算式，這裡使用while將所有「幾d幾」的骰子找出來，一個一個帶入RollDice並取代原有的部分
   while(DiceToRoll.match(/\d+d\d+/)!=null) {
     let tempMatch = DiceToRoll.match(/\d+d\d+/);    
-    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'指揮官，這裡不支援200D以上擲骰喔'};
+    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'指揮官 用腦袋好好想一想 什麼時候會要骰超過200顆以上'};
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'指揮官，這裡不支援D1和超過D500的擲骰'};
     DiceToRoll = DiceToRoll.replace(/\d+d\d+/, RollDice(tempMatch));
   }
@@ -421,8 +421,8 @@ function ccCreate(inputStr){
 
     
     let ReStr = '《CoC7版核心規則創角擲骰》\n調查員年齡設為：' + old + '\n';
-    if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';    
-    if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+    if (old < 15) return ReStr + '指揮官，核心規則不允許小於15歲的人物哦。';    
+    if (old >= 90) return ReStr + '指揮官，核心規則不允許90歲以上的人物哦。'; 
     
 
     //設定 因年齡減少的點數 和 EDU加骰次數，預設為零
@@ -641,8 +641,8 @@ function CoC7th(rplyToken, inputStr){
             if (finalRoll <= chack/2) ReStr = ReStr + finalRoll + ' → 困難成功';
           else
             if (finalRoll <= chack) ReStr = ReStr + finalRoll + ' → 通常成功';
-	  else
-            if (finalRoll = 87) ReStr = ReStr + finalRoll + ' → 骰出這個可不是在暗示指揮官呢';
+          else
+            if (finalRoll == 87) ReStr = ReStr + finalRoll + ' → 骰出這個可不是在暗示指揮官呢';
           else  ReStr = ReStr + finalRoll + ' → 失敗' ;
 
           //浮動大失敗運算
