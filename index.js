@@ -1004,7 +1004,7 @@ function YabasoReply(inputStr) {
     let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是，不要知道比較好','這應該不關我的事'];
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   } 
-  /*
+  
   //沒有觸發關鍵字則是這個
   else{
     let rplyArr = [
@@ -1187,4 +1187,4 @@ function Yababang(inputStr) {
       
   return reply;
 }
-*/
+
