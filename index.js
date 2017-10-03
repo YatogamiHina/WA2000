@@ -144,8 +144,8 @@ function parseInput(rplyToken, inputStr) {
         else
 		
 	//這三個是偏向玩鬧型的功能，如果說只是要擲骰可以不管。
-        //鴨霸獸指令開始於此
-        if (inputStr.match('鴨霸獸') != null) return YabasoReply(inputStr) ;
+        //WA2000指令開始於此
+        if (inputStr.match('WA2000') != null) return YabasoReply(inputStr) ;
         else
 
 	//圖片訊息在此
@@ -153,7 +153,7 @@ function parseInput(rplyToken, inputStr) {
         else
           
         //入幫測驗功能判定在此
-        if (inputStr.match('鴨霸幫入幫測驗') != null) return Yababang(inputStr) ;      
+        if (inputStr.match('WA2000') != null) return Yababang(inputStr) ;      
         else 
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
@@ -833,25 +833,21 @@ function YabasoReply(inputStr) {
 ';
   else           
     
-  //鴨霸獸幫我選～～
+  //幫我選～～
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
     
-    if (rplyArr.length == 1) return '靠腰喔要我選也把選項格式打好好不好，真的想被淨灘嗎？';
+    if (rplyArr.length == 1) return '指揮官你還是去死吧';
     
     let Answer = rplyArr[Dice(rplyArr.length)-1];
-    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('鴨霸獸') != null) {
-      rplyArr = ['幹，你不會自己決定嗎',
-                 '人生是掌握在自己手裡的',
-                 '隨便哪個都好啦',
-                 '連這種東西都不能決定，是不是不太應該啊',
-                 '沒事別叫我選東西好嗎，難道你們都是天秤座嗎（戰）',
-                 '不要把這種東西交給機器人決定比較好吧'];
+    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
+      rplyArr = ['指揮官你還是去死吧',
+                 '不要把這種事情0交給我決定比較好吧'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
     return '我想想喔……我覺得，' + Answer + '。';
   }
-   
+ /*  
   //以下是幫眾限定的垃圾話
     let message = [
       {
@@ -1001,15 +997,15 @@ function YabasoReply(inputStr) {
       }
 
     }
-    
+   */ 
   //以下是運勢功能
   if(inputStr.match('運勢') != null){
     let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是，不要知道比較好','這應該不關我的事'];
-    return '運勢喔…我覺得，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
+    return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   } 
   
   //沒有觸發關鍵字則是這個
-  else{
+  /*else{
     let rplyArr = [
       '你們死定了呃呃呃不要糾結這些……所以是在糾結哪些？',
       '在澳洲，每過一分鐘就有一隻鴨嘴獸被拔嘴。 \n我到底在共三小。',
@@ -1051,11 +1047,11 @@ function YabasoReply(inputStr) {
       'ｅｒｒｏｒ：齁，你把鴨霸獸弄壞了。準備迎接幫眾的怒火吧。',
       '幫主說，有人打你的左臉，你就要用肉食性猛擊咬斷他的小腿。'];
     return rplyArr[Dice(rplyArr.length)-1];
-  }
+  }*/
 
 }
 
-function Yababang(inputStr) {
+/*function Yababang(inputStr) {
   let rplyArr = inputStr.split(' ');
   let pl = rplyArr[1];
   if (rplyArr.length == 1) return '想要挑戰入幫測驗，就把格式打好啊幹！';
@@ -1189,4 +1185,4 @@ function Yababang(inputStr) {
   if (DeadOrNot == 2) reply = reply + '\n\n================\n恭喜【'+pl+'】成功存活，成為新一代的鴨霸幫幫眾。\n請到隔壁的櫃檯繳納會費，然後期待下一次淨灘的時候你還可以存活下來。';
       
   return reply;
-}
+}*/
