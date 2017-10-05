@@ -152,7 +152,7 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        if (inputStr.match('召喚') != null) return Summon(inputStr) ;
+        if (inputStr.match('^召喚') != null) return Summon(inputStr) ;
         else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
