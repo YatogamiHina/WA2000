@@ -152,7 +152,10 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        if (inputStr.match('召喚拜亞基') != null) return Summon(inputStr) ;
+        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
+        else
+	
+        if (inputStr.match('召喚黑山羊幼仔') != null) return Dark Young(inputStr) ;
         else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
@@ -690,7 +693,7 @@ function CoC7th(rplyToken, inputStr){
           return ReStr;
 }
 
-function Summon(inputStr){
+function Byakhee(inputStr){
     let finalStr = '拜亞基能力值\n';
     let pow = DiceCal('3d6').eqStr;
 
@@ -704,6 +707,26 @@ function Summon(inputStr){
     finalStr = finalStr +'\nDEF:2';
     finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 1D6力量／輪\n';  
     finalStr = finalStr +'\n 若POW>=14 會' + DiceCal('1d4').eqStr + '種咒文';
+	
+
+
+    return finalStr;
+  }
+
+function Dark Young(inputStr){
+    let finalStr = '黑山羊幼仔能力值\n';
+    let pow = DiceCal('5d6').eqStr;
+
+   
+    finalStr = finalStr +'\n' +  'STR:' + DiceCal('4d3+30').eqStr;
+    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6+6').eqStr;
+    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('4d6+30').eqStr;
+    finalStr = finalStr +'\n' +  'INT:' + DiceCal('4d6').eqStr;
+    finalStr = finalStr +'\n' +  'POW:' + pow;
+    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+6').eqStr;
+    finalStr = finalStr +'\n DEF:2';
+    finalStr = finalStr +'\n 武器：\n  觸肢80% (DB，力量值吸取) (每轮1d3) \n  踐踏40% (2d6+DB)';  
+    finalStr = finalStr +'\n 黑山羊幼仔可使用的為INT的一半(小數點無條件進位)';
 	
 
 
