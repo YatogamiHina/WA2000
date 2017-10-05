@@ -152,9 +152,8 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        //入幫測驗功能判定在此
-        if (inputStr.match('鴨霸幫入幫測驗') != null) return Yababang(inputStr) ;      
-        else 
+        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
+        else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -693,10 +692,9 @@ function CoC7th(rplyToken, inputStr){
 
 function Byakhee(inputStr){
 
-  if (inputStr.toLowerCase().match('召喚拜亞基')!=null){
     let finalStr = '拜亞基能力值\n';
 
- /*  
+   
     finalStr = finalStr +'\n' +  'STR:' + DiceCal('5d6').eqStr;
     finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6').eqStr;
     finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('5d6').eqStr;
@@ -707,7 +705,7 @@ function Byakhee(inputStr){
     finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊噬咬（35%）1D6+吸血 \n 1D6力量／輪\n';
     　　
 
-    */
+    
 
     return finalStr;
   }
