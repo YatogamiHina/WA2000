@@ -708,7 +708,7 @@ function Summon(inputStr){
 	}
        
 	else{
-	       finalStr = finalStr
+	       finalStr = finalStr;
        }
 
 
