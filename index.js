@@ -704,7 +704,7 @@ function Summon(inputStr){
     finalStr = finalStr +'\nDEF:2';
     finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 1D6力量／輪\n';  
 	if pow >= 14{
-		finalStr = finalStr +'\n 會' + DiceCal('1d4').eqStr + '種咒文;
+		finalStr = finalStr +'\n 會' + DiceCal('1d4').eqStr + '種咒文';
 	}
 
 
