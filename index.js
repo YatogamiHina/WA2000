@@ -157,6 +157,9 @@ function parseInput(rplyToken, inputStr) {
 	
         if (inputStr.match('召喚黑山羊幼仔') != null) return DarkYoung(inputStr) ;
         else
+	
+        if (inputStr.match('召喚空鬼') != null) return Shambler(inputStr) ;
+        else	
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -715,16 +718,14 @@ function Byakhee(inputStr){
 
 function DarkYoung(inputStr){
     let finalStr = '黑山羊幼仔能力值\n';
-    let pow = DiceCal('5d6').eqStr;
 
    
     finalStr = finalStr +'\n' +  'STR:' + DiceCal('4d3+30').eqStr;
     finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6+6').eqStr;
     finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('4d6+30').eqStr;
     finalStr = finalStr +'\n' +  'INT:' + DiceCal('4d6').eqStr;
-    finalStr = finalStr +'\n' +  'POW:' + pow;
+    finalStr = finalStr +'\n' +  'POW:' + DiceCal('5d6').eqStr;
     finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+6').eqStr;
-    finalStr = finalStr +'\n DEF:2';
     finalStr = finalStr +'\n 武器：\n  觸肢80% (DB，力量值吸取) (每轮1d3) \n  踐踏40% (2d6+DB)';  
     finalStr = finalStr +'\n 黑山羊幼仔可使用的為INT的一半(小數點無條件進位)';
 	
@@ -733,6 +734,24 @@ function DarkYoung(inputStr){
     return finalStr;
   }
  
+function Shambler(inputStr){
+    let finalStr = '空鬼能力值\n';
+   
+    finalStr = finalStr +'\n' +  'STR:' + DiceCal('2d6+12').eqStr;
+    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6+6').eqStr;
+    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('2d6+12').eqStr;
+    finalStr = finalStr +'\n' +  'INT:' + DiceCal('2d6').eqStr;
+    finalStr = finalStr +'\n' +  'POW:' + DiceCal('3d6').eqStr;
+    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6').eqStr;
+    finalStr = finalStr +'\n DEF:3';
+    finalStr = finalStr +'\n 武器：\n   鉤爪30% (1d8+DB)';  
+    finalStr = finalStr +'\n INT高於9 每高1點會多隻小1種咒文';
+	
+
+
+    return finalStr;
+  }
+
 function YabasoReply(inputStr) { 
 
   //鴨霸獸幫我選～～
