@@ -152,7 +152,7 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
+        if (inputStr.match('召喚') != null) return Summon(inputStr) ;
         else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
@@ -690,8 +690,8 @@ function CoC7th(rplyToken, inputStr){
           return ReStr;
 }
 
-function Byakhee(inputStr){
-
+function Summon(inputStr){
+    if (inputStr.toLowerCase().match('拜亞基') != null)
     let finalStr = '拜亞基能力值\n';
 
    
