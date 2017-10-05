@@ -702,7 +702,7 @@ function Byakhee(inputStr){
     finalStr = finalStr +'\n' +  'POW:' + DiceCal('5d6').eqStr;
     finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+3').eqStr;
     finalStr = finalStr +'\nDEF:2';
-    finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊噬咬（35%）1D6 \n 吸血 \n 1D6力量／輪\n';
+    finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 \n 1D6力量／輪\n';
     　　
 
     
