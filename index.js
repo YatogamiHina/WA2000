@@ -155,7 +155,7 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
         else
 	
-        if (inputStr.match('召喚黑山羊幼仔') != null) return Dark Young(inputStr) ;
+        if (inputStr.match('召喚黑山羊幼仔') != null) return DarkYoung(inputStr) ;
         else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
@@ -713,7 +713,7 @@ function Byakhee(inputStr){
     return finalStr;
   }
 
-function Dark Young(inputStr){
+function DarkYoung(inputStr){
     let finalStr = '黑山羊幼仔能力值\n';
     let pow = DiceCal('5d6').eqStr;
 
