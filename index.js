@@ -696,7 +696,7 @@ function Byakhee(inputStr){
   if (inputStr.toLowerCase().match('召喚拜亞基')==null){
     let finalStr = '拜亞基能力值\n';
 
-   
+ /*  
     finalStr = '\n' +  'STR:' + DiceCal('5d6').eqStr;
     finalStr = '\n' +  'CON:' + DiceCal('3d6').eqStr;
     finalStr = '\n' +  'SIZ:' + DiceCal('5d6').eqStr;
@@ -705,7 +705,7 @@ function Byakhee(inputStr){
     finalStr = '\n' +  'DEX:' + DiceCal('3d6+3').eqStr;
     finalStr = '\n' +  'DEF:2';
     finalStr = '\n' +  '武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊噬咬（35%）1D6+吸血 \n 1D6力量／輪\n';
-
+*/
     return finalStr;
  }
 
