@@ -706,6 +706,10 @@ function Summon(inputStr){
 	if pow >= 14{
 		finalStr = finalStr +'\n 會' + DiceCal('1d4').eqStr + '種咒文';
 	}
+       
+	else{
+	       finalStr = finalStr
+       }
 
 
     return finalStr;
