@@ -691,7 +691,7 @@ function CoC7th(rplyToken, inputStr){
 }
 
 function Summon(inputStr){
-    if (inputStr.toLowerCase().match('拜亞基') != null){
+    if (inputStr.toLowerCase().match('召喚拜亞基') != null){
 	    let finalStr = '拜亞基能力值\n';
 
    
