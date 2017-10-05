@@ -691,6 +691,27 @@ function CoC7th(rplyToken, inputStr){
           return ReStr;
 }
 
+function Byakhee(inputStr){
+
+  if (inputStr.toLowerCase().match('召喚拜亞基')==null){
+    let finalStr = '拜亞基能力值\n';
+
+   
+    finalStr = finalStr +'\n' +  'STR:' + DiceCal('5d6').eqStr;
+    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6').eqStr;
+    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('5d6').eqStr;
+    finalStr = finalStr +'\n' +  'INT:' + DiceCal('3d6').eqStr;
+    finalStr = finalStr +'\n' +  'POW:' + DiceCal('5d6').eqStr;
+    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+3').eqStr;
+    finalStr = finalStr +'\n' +  'DEF:2';
+    finalStr = finalStr +'\n' +  '武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊噬咬（35%）1D6+吸血 \n 1D6力量／輪\n';
+    　　
+
+    
+
+    return finalStr;
+  }
+
  
 function YabasoReply(inputStr) { 
 
