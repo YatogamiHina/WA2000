@@ -152,7 +152,7 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        if (inputStr.match('^召喚') != null) return Summon(inputStr) ;
+        if (inputStr.match('召喚拜亞基') != null) return Summon(inputStr) ;
         else
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
@@ -691,19 +691,21 @@ function CoC7th(rplyToken, inputStr){
 }
 
 function Summon(inputStr){
-    if (inputStr.toLowerCase().match('召喚拜亞基') != null){
-	    let finalStr = '拜亞基能力值\n';
+    let finalStr = '拜亞基能力值\n';
+    let pow = DiceCal('3d6').eqStr;
 
    
     finalStr = finalStr +'\n' +  'STR:' + DiceCal('5d6').eqStr;
     finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6').eqStr;
     finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('5d6').eqStr;
     finalStr = finalStr +'\n' +  'INT:' + DiceCal('3d6').eqStr;
-    finalStr = finalStr +'\n' +  'POW:' + DiceCal('3d6').eqStr;
+    finalStr = finalStr +'\n' +  'POW:' + pow;
     finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+3').eqStr;
     finalStr = finalStr +'\nDEF:2';
-    finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 1D6力量／輪\n';
-}    　　
+    finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 1D6力量／輪\n';  
+	if pow >= 14{
+		finalStr = finalStr +'\n 會' + DiceCal('1d4').eqStr + '種咒文;
+	}
 
 
     return finalStr;
