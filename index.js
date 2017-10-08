@@ -763,7 +763,6 @@ function YabasoReply(inputStr) {
     let Answer = rplyArr[Dice(rplyArr.length)-1];
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
       rplyArr = ['指揮官你還是去死吧',
-                 '人生是掌握在自己手裡的',
                  '不要把這種事情交給我決定比較好吧'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
