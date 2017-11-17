@@ -776,10 +776,6 @@ function YabasoReply(inputStr) {
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   } 
 
-  if(inputStr.match('紅包') != null){
-    let rplyArr=[img: ['https://i.imgur.com/FItqGSH.jpg']];
-    return 'rplyArr[Dice(rplyArr.length)-1]';
-  } 
 
   
   //沒有觸發關鍵字則是這個
