@@ -145,21 +145,16 @@ function parseInput(rplyToken, inputStr) {
 		
 	//這三個是偏向玩鬧型的功能，如果說只是要擲骰可以不管。
         //鴨霸獸指令開始於此
-        if (inputStr.match('WA2000') != null) return YabasoReply(inputStr) ;
+        if (inputStr.match('鴨霸獸') != null) return YabasoReply(inputStr) ;
         else
 
 	//圖片訊息在此
         if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
         else
           
-        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
-        else
-	
-        if (inputStr.match('召喚黑山羊幼仔') != null) return DarkYoung(inputStr) ;
-        else
-	
-        if (inputStr.match('召喚空鬼') != null) return Shambler(inputStr) ;
-        else	
+        //入幫測驗功能判定在此
+        if (inputStr.match('鴨霸幫入幫測驗') != null) return Yababang(inputStr) ;      
+        else 
 		
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -271,8 +266,8 @@ function nomalDiceRoller(inputStr){
       finalStr = finalStr +'\n' + i + '# ' + DiceCal(DiceToRoll).eqStr;
     }
     //報錯，不解釋。
-    if(finalStr.match('200D')!= null) finalStr = '複數擲骰：\n指揮官 用腦袋好好想一想 什麼時候會要骰超過200顆以上';
-    if(finalStr.match('D500')!= null) finalStr = '複數擲骰：\n指揮官，這裡不支援D1和超過D500的擲骰';
+    if(finalStr.match('200D')!= null) finalStr = '複數擲骰：\n欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？';
+    if(finalStr.match('D500')!= null) finalStr = '複數擲骰：\n不支援D1和超過D500的擲骰；想被淨灘嗎？';
     
   } 
   
@@ -320,8 +315,8 @@ function DiceCal(inputStr){
   //寫出算式，這裡使用while將所有「幾d幾」的骰子找出來，一個一個帶入RollDice並取代原有的部分
   while(DiceToRoll.match(/\d+d\d+/)!=null) {
     let tempMatch = DiceToRoll.match(/\d+d\d+/);    
-    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'指揮官 用腦袋好好想一想 什麼時候會要骰超過200顆以上'};
-    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'指揮官，這裡不支援D1和超過D500的擲骰'};
+    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？'};
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'不支援D1和超過D500的擲骰；想被淨灘嗎？'};
     DiceToRoll = DiceToRoll.replace(/\d+d\d+/, RollDice(tempMatch));
   }
   
@@ -426,8 +421,8 @@ function ccCreate(inputStr){
 
     
     let ReStr = '《CoC7版核心規則創角擲骰》\n調查員年齡設為：' + old + '\n';
-    if (old < 15) return ReStr + '指揮官，核心規則不允許小於15歲的人物哦。';    
-    if (old >= 90) return ReStr + '指揮官，核心規則不允許90歲以上的人物哦。'; 
+    if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';    
+    if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
     
 
     //設定 因年齡減少的點數 和 EDU加骰次數，預設為零
@@ -635,19 +630,17 @@ function CoC7th(rplyToken, inputStr){
   }  
 
           //結果判定
-          if (finalRoll == 1) ReStr = ReStr + finalRoll + ' → 才不是為了指揮官幫你骰大成功呢....哼';
+          if (finalRoll == 1) ReStr = ReStr + finalRoll + ' → 恭喜！大成功！';
           else
-            if (finalRoll == 100) ReStr = ReStr + finalRoll + ' → 我本人都親自幫你骰了 大失敗?! 那種結果就別在意';
+            if (finalRoll == 100) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
           else
-            if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 我本人都親自幫你骰了 大失敗?! 那種結果就別在意';
+            if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
           else
             if (finalRoll <= chack/5) ReStr = ReStr + finalRoll + ' → 極限成功';
           else
             if (finalRoll <= chack/2) ReStr = ReStr + finalRoll + ' → 困難成功';
           else
             if (finalRoll <= chack) ReStr = ReStr + finalRoll + ' → 通常成功';
-          else
-            if (finalRoll == 87) ReStr = ReStr + finalRoll + ' → 骰出這個可不是在暗示指揮官呢';
           else  ReStr = ReStr + finalRoll + ' → 失敗' ;
 
           //浮動大失敗運算
@@ -659,7 +652,8 @@ function CoC7th(rplyToken, inputStr){
 
   
 	//這是在骰出大成功或大失敗時附加圖片的程式碼，可以自己研究；不想要的話整個刪掉也不影響
-	if (ReStr.match('我本人都親自幫你骰了 大失敗?! 那種結果就別在意')!= null){
+	if (ReStr.match('啊！大失敗')!= null){
+	let fumbleImgArr =['https://i.imgur.com/ju9UQzA.png','https://i.imgur.com/M3meWXu.png','https://i.imgur.com/nWxGZyz.png','https://i.imgur.com/cq0WGxH.png'];
 	let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
 	let fumble = [
 			{
@@ -676,7 +670,8 @@ function CoC7th(rplyToken, inputStr){
 		return undefined;
 	}
 	
-	if (ReStr.match('才不是為了指揮官幫你骰大成功呢....哼')!= null){
+	if (ReStr.match('恭喜！大成功')!= null){
+	let CriImgArr =['https://i.imgur.com/jevHZqa.png'];
 	let CriImg = CriImgArr[Dice(CriImgArr.length)-1];
 	let Cri = [
 			{
@@ -696,93 +691,502 @@ function CoC7th(rplyToken, inputStr){
           return ReStr;
 }
 
-function Byakhee(inputStr){
-    let finalStr = '拜亞基能力值\n';
-    let pow = DiceCal('3d6').eqStr;
-
-   
-    finalStr = finalStr +'\n' +  'STR:' + DiceCal('5d6').eqStr;
-    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6').eqStr;
-    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('5d6').eqStr;
-    finalStr = finalStr +'\n' +  'INT:' + DiceCal('3d6').eqStr;
-    finalStr = finalStr +'\n' +  'POW:' + pow;
-    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+3').eqStr;
-    finalStr = finalStr +'\nDEF:2';
-    finalStr = finalStr +'\n 武器：\n 鉤爪（35%）1D6+DB \n 二次攻擊\n 噬咬（35%）1D6 \n 吸血 1D6力量／輪\n';  
-    finalStr = finalStr +'\n 若POW>=14 會' + DiceCal('1d4').eqStr + '種咒文';
-	
-
-
-    return finalStr;
+//依照關鍵字傳送圖片的函數
+function SendImg(rplyToken, inputStr) {
+     let message = [
+  {
+    chack: ['想相離家出走','阿想離家出走'],
+    img: ['https://i.imgur.com/FItqGSH.jpg']
+    //Pimg: ['https://i.imgur.com/FItqGSH.jpg']
+  },
+  {
+    chack: ['我什麼都沒有'],
+    img: ['https://i.imgur.com/k4QE5Py.png']
+    //Pimg: ['https://i.imgur.com/k4QE5Py.png']
+  },
+  {
+    chack: ['大家的小三','大家的小3'],
+    img: ['https://i.imgur.com/dKW2EJb.png']
+    //Pimg: ['https://i.imgur.com/dKW2EJb.png']
+  },
+  {
+    chack: ['問號黑人','黑人問號','尼哥問號','問號尼哥','尼格問號','問號尼格'],
+    img: ['https://i.imgur.com/cUR20OZ.png']
+  },
+  {
+    chack: ['貴圈真亂'],
+    img: ['https://i.imgur.com/PalRocR.png']
+  },
+  {
+    chack: ['怕'],
+    img: ['https://i.imgur.com/qXGsztE.png']
+  },
+  {
+    chack: ['你要享受這個過程','妳要享受這個過程'],
+    img: ['https://i.imgur.com/mt7NVzr.png','https://i.imgur.com/v094wOd.png','https://i.imgur.com/F5RfDW2.png','https://i.imgur.com/jWm6f6z.png']
+  },
+  {
+    chack: ['我覺得不行'],
+    img: ['https://i.imgur.com/zXvsvJf.png','https://i.imgur.com/U1AK4kL.png','https://i.imgur.com/4TClOgY.png']
+  },
+  {
+    chack: ['我覺得可以','我覺得其實可以'],
+    img: ['https://i.imgur.com/K5WsXso.png']
+  },
+  {
+    chack: ['警察','就是這個人'],
+    img: ['https://i.imgur.com/7BTPpPQ.png','https://i.imgur.com/nweWacp.png','https://i.imgur.com/j0hIscH.png','https://i.imgur.com/9BDCkJr.png','https://i.imgur.com/2ZiVw9g.png']
+  },
+  {
+    chack: ['姆米','姆咪','母米'],
+    img: ['https://i.imgur.com/j7bMpAO.png','https://i.imgur.com/0AatpWN.png','https://i.imgur.com/S69OoYS.png','https://i.imgur.com/kEGB0Vj.png']
+  },
+  {
+    chack: ['take my money','shut up and'],
+    img: ['https://i.imgur.com/UX0OUc0.png']
+  },
+  {
+    chack: ['接受挑戰','challenge'],
+    img: ['https://i.imgur.com/uUwcxtj.png']
+  },
+  {
+    chack: ['成龍'],
+    img: ['https://i.imgur.com/cq0WGxH.png']
+  },
+  {
+    chack: ['true story','真實故事'],
+    img: ['https://i.imgur.com/88MiBLA.png']
+  },
+  {
+    chack: ['一槍'],
+    img: ['https://i.imgur.com/FnmSMWq.png']
   }
 
-function DarkYoung(inputStr){
-    let finalStr = '黑山羊幼仔能力值\n';
 
-   
-    finalStr = finalStr +'\n' +  'STR:' + DiceCal('4d3+30').eqStr;
-    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6+6').eqStr;
-    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('4d6+30').eqStr;
-    finalStr = finalStr +'\n' +  'INT:' + DiceCal('4d6').eqStr;
-    finalStr = finalStr +'\n' +  'POW:' + DiceCal('5d6').eqStr;
-    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6+6').eqStr;
-    finalStr = finalStr +'\n 武器：\n  觸肢80% (DB，力量值吸取) (每轮1d3) \n  踐踏40% (2d6+DB)';  
-    finalStr = finalStr +'\n 黑山羊幼仔可使用的為INT的一半(小數點無條件進位)';
-	
-
-
-    return finalStr;
+  ]
+  
+  for ( i=0 ; i < message.length ; i ++){
+    for ( j=0 ; j < message[i].chack.length ; j ++){
+      if (inputStr.toLowerCase().match(message[i].chack[j]) != null) {
+	 let tempImgUrl = message[i].img[Dice(message[i].img.length)-1];
+         let rplyVal = [
+           {
+            type: "image", 
+            originalContentUrl: tempImgUrl, 
+            previewImageUrl: tempImgUrl
+           }
+         ]
+         SendMsg(rplyToken, rplyVal);
+         return undefined;
+      }
+    }
+    
   }
- 
-function Shambler(inputStr){
-    let finalStr = '空鬼能力值\n';
-   
-    finalStr = finalStr +'\n' +  'STR:' + DiceCal('2d6+12').eqStr;
-    finalStr = finalStr +'\n' +  'CON:' + DiceCal('3d6+6').eqStr;
-    finalStr = finalStr +'\n' +  'SIZ:' + DiceCal('2d6+12').eqStr;
-    finalStr = finalStr +'\n' +  'INT:' + DiceCal('2d6').eqStr;
-    finalStr = finalStr +'\n' +  'POW:' + DiceCal('3d6').eqStr;
-    finalStr = finalStr +'\n' +  'DEX:' + DiceCal('3d6').eqStr;
-    finalStr = finalStr +'\n DEF:3';
-    finalStr = finalStr +'\n 武器：\n   鉤爪30% (1d8+DB)';  
-    finalStr = finalStr +'\n INT高於9 每高1點會多隻小1種咒文';
-	
 
-
-    return finalStr;
-  }
+  return undefined;
+}
 
 function YabasoReply(inputStr) { 
+  //一般功能說明
+  if (inputStr.match('說明') != null) return YabasoReply('0') + '\
+\n \
+\n總之現在應該支援直接的四則運算了，直接打：2d4+1、2D10+1d2\
+\n要多筆輸出就是先打你要的次數，再空一格打骰數：7 3d6、5 2d6+6  \
+\n現在打成大寫D，我也不會嗆你了哈哈哈。 \
+\n \
+\n目前支援多數CoC 7th指令，可打「鴨霸獸 cc」取得更多說明。 \
+\n初步支持pbta擲骰，語法為pb、pb+2。\
+\n \
+\n其他骰組我都用不到，所以不會去更新哈哈哈哈哈！ \
+\n以上功能靈感來源全部來自悠子桑的Hastur，那隻的功能超完整快加他： @fmc9490c \
+\n這隻的BUG超多，只會說垃圾話；可以問我垃圾話相關指令哦～\
+';
+  else
+  //垃圾話功能說明
+  if (inputStr.match('垃圾話') != null) return '\
+嗚呵呵呵呵，我就知道你們人類沒辦法抗拒垃圾話的。\
+\n目前實裝的垃圾話功能是以下這些：\
+\n運勢：你只要提到我的名字和運勢，我就會回答你的運勢。 \
+\n==\
+\n隨機選擇：只要提到我的名字和[選、挑、決定]，然後空一格打選項。 \
+記得選項之間也要用空格隔開，我就會幫選擇障礙的你挑一個。\
+\n \
+\n看起來很實用對不對～那為什麼會叫做垃圾話呢？\
+\n因為不管哪個功能都有可能會被嗆啊哈哈哈哈哈！\
+';
+  else    
 
+    //CC功能說明
+    if (inputStr.match('cc') != null) return '\
+【CC功能說明】\
+\n \
+\n和凍豆腐一樣，最常用的是「cc<=[數字]」的一般檢定。\
+\n還有「cc([-2~2])<=[數字]」的獎懲骰。\
+\n \
+\n和凍豆腐不同的新增功能如下： \
+\n==\
+\n幕間成長骰：「cc>[數字]」，用於幕間技能成長。\
+\n==\
+\n一鍵創角：「cc 創角/crt [年齡]」，\n若不加上年齡參數，則以悠子/冷嵐房規創角。若加上年齡，則以核心規則創角（含年齡調整）。\
+\n==\
+\n一鍵產生背景：「cc bg」，娛樂性質居多的調查員背景產生器\
+';
+  else           
+    
   //鴨霸獸幫我選～～
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
     
-    if (rplyArr.length == 1) return '指揮官連格式都打不好嗎，你還是去死吧';
+    if (rplyArr.length == 1) return '靠腰喔要我選也把選項格式打好好不好，真的想被淨灘嗎？';
     
     let Answer = rplyArr[Dice(rplyArr.length)-1];
-    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
-      rplyArr = ['指揮官你還是去死吧',
-                 '不要把這種事情交給我決定比較好吧'];
+    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('鴨霸獸') != null) {
+      rplyArr = ['幹，你不會自己決定嗎',
+                 '人生是掌握在自己手裡的',
+                 '隨便哪個都好啦',
+                 '連這種東西都不能決定，是不是不太應該啊',
+                 '沒事別叫我選東西好嗎，難道你們都是天秤座嗎（戰）',
+                 '不要把這種東西交給機器人決定比較好吧'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
     return '我想想喔……我覺得，' + Answer + '。';
   }
+   
+  //以下是幫眾限定的垃圾話
+    let message = [
+      {
+        chack: ['泰','ㄩㄊ','太太'],
+        text: ['（抱頭）嗚噁噁噁噁噁頭好痛…',
+               '你說什麼……嗚嗚……不要提這個QQ',
+               '哈哈，你說什麼呢……啊啦，眼淚怎麼自己流下來了QQ']
+      },
+      {
+        chack: ['超進化'],
+        text: ['超霸獸超進化～～超級機霸獸～～～\n（BGM：http://tinyurl.com/jjltrnt）']
+      },
+      {
+        chack: ['進化'],
+        text: ['鴨霸獸進化～～超霸獸～～～\n（BGM：http://tinyurl.com/jjltrnt）']
+      },
+      {
+        chack: ['拔嘴'],
+        text: ['傳說中，凡是拔嘴過鴨嘴獸的人，有高機率在100年內死去。', 
+               '拔嘴的話，我的嘴巴會長出觸手，然後開花成四個花瓣哦 (´×`)',
+               '在澳洲，每過一分鐘就有一隻鴨嘴獸被拔嘴。',
+               '可以的可以的，隨意隨意；反正機械鴨霸獸的嘴是拋棄式的。',
+               '人類每花60秒拔嘴，就減少一分鐘的壽命。']
+      },
+      {
+        chack: ['鬼屋'],
+        text: ['我還是覺得鬼屋不適合新手KP啦！', 
+               '誰再說鬼屋適合新手KP的我就（ry',
+               '在澳洲，每過一分鐘就有一隻鴨嘴獸被拔嘴。',
+               '神說，你們誰開過鬼屋的，都可以拿石頭打他。']
+      },
+      {
+        chack: ['約翰希南','江西'],
+        text: ['HIS NAME IS~~~~江～～～西哪～～～～（登等愣～登！！！登瞪愣登！！！）',
+               '江江江江，有一條江耶，來跳江好了。']
+      },
+      {
+        chack: ['三小'],
+        text: ['幫主你也敢嘴。', '不要起爭議啦！', '你在大聲什麼啦！']
+      },
+      {
+        chack: ['鴨霸幫'],
+        text: ['要加入鴨霸幫是沒有這麼容易的，你必須經過重重考驗，攀登過末日火山，穿越過幽暗水道，戰勝九頭蜥蜴，並且躍過無底深淵。\n\n\n或者你也可以選擇月付１９９９成為白銀幫眾。現在加入前三個月還打八折喔。']
+      },
+      {
+        chack: ['阿想'],
+        text: ['男的，也可以。',
+               '還好我中壢山蟑螂沒講錯。']
+      },
+      {
+        chack: ['愛'],
+        text: ['我是不會嗆你的，因為霸獸愛你。']
+      },
+      {
+        chack: ['哈哈哈'],
+        text: ['你的銅鋰鋅咧？']
+      },
+      {
+        chack: ['狂'],
+        text: ['948794狂，你有幫主狂？淨灘啦！']
+      },
+      {
+        chack: ['笑'],
+        text: ['幫主笑阿笑，笑得你心底發寒。']
+      },
+      {
+        chack: ['家訪'],
+        text: ['ㄉㄅㄑ']
+      },
+      {
+        chack: ['饅頭'],
+        text: ['可愛。']
+      },
+      {
+        chack: ['開司'],
+        text: ['給開司一罐啤酒！']
+      },
+      {
+        chack: ['阿珠'],
+        text: ['有種哈味。', '不知道今天在誰床上呢？', '路過說他已經(ry']
+      },
+      {
+        chack: ['炸彈'],
+        text: ['野～格～炸～彈～', '那你就帶著野格炸彈吧。', '野、格、炸、彈，我、的、最、愛。' ]
+      },
+      {
+        chack: ['864','巴魯斯','sora'],
+        text: ['呃啊啊啊啊啊啊啊啊──！！！不對、我幹嘛要做反應？', '阿，這是新的一天來臨的訊號。', 'バルス！', 'burrs！', 'Barış！', 'Bals！', 'Barusu！' ]
+      },
+      {
+        chack: ['康青龍'],
+        text: ['淨灘之力與康青龍同在。']
+      },
+      {
+        chack: ['軒'],
+        text: ['這我一定吉。']
+      },
+      {
+        chack: ['肉食性猛擊'],
+        text: ['想試試嗎？（張嘴）']
+      },
+      {
+        chack: ['俊豪'],
+        text: ['錯誤導入，誤你一生。']
+      },
+      {
+        chack: ['豆腐'],
+        text: ['鴨霸獸不吃。']
+      },
+      {
+        chack: ['包子'],
+        text: ['幹你娘我最討厭的就是包子你還一直提一直提']
+      },
+      {
+        chack: ['鍋貼'],
+        text: ['十二顆一盒，鴨霸獸也不吃，而且無比憎恨它。']
+      },
+      {
+        chack: ['水餃'],
+        text: ['噁噁噁噁噁噁噁噁噁']
+      },
+      {
+        chack: ['蘿蔔'],
+        text: ['我說蘿蔔又白又正又嬌小好像可以抱起來轉；照片我有存，意者請私訊yabaso。']
+      },
+      {
+        chack: ['爪黃'],
+        text: ['痾痾痾你們死定了啦，不用在意那麼多。']
+      },
+      {
+        chack: ['私訊'],
+        text: ['噁噁噁幹好恐怖']
+      },
+      {
+        chack: ['黑熊'],
+        text: ['中壢李性閃亮的黑熊熊穿浴衣👘～混亂善娘的黑熊熊穿浴衣👘～耶嘿～\n黑熊醬這樣可愛的女孩，沒男朋友真是太不可思議了！',
+               '中壢，李性，閃亮（燦笑）', '混亂善娘（燦笑）', '黑熊熊穿浴衣👘～黑熊熊穿浴衣👘～耶嘿～', '黑熊醬這樣可愛的女孩，沒男朋友真是太不可思議了']
+      }
 
+    ]
+
+    for ( i=0 ; i < message.length ; i ++){
+      for ( j=0 ; j < message[i].chack.length ; j ++){
+        if (inputStr.toLowerCase().match(message[i].chack[j]) != null) {
+          return message[i].text[Dice(message[i].text.length)-1];
+        }
+      }
+
+    }
     
   //以下是運勢功能
   if(inputStr.match('運勢') != null){
     let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是，不要知道比較好','這應該不關我的事'];
-    return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
+    return '運勢喔…我覺得，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   } 
-
-
   
   //沒有觸發關鍵字則是這個
   else{
-    let rplyArr = [];
+    let rplyArr = [
+      '你們死定了呃呃呃不要糾結這些……所以是在糾結哪些？',
+      '在澳洲，每過一分鐘就有一隻鴨嘴獸被拔嘴。 \n我到底在共三小。',
+      '嗚噁噁噁噁噁噁，不要隨便叫我。',
+      '幹，你這學不會的豬！',
+      '嘎嘎嘎。',
+      'wwwwwwwwwwwwwwwww',
+      '為什麼你們每天都可以一直玩；玩就算了還玩我。',
+      '好棒，整點了！咦？不是嗎？',
+      '不要打擾我挖坑！',
+      '好棒，誤點了！',
+      '在南半球，一隻鴨嘴獸拍打他的鰭，他的嘴就會掉下來。 \n我到底在共三小。',
+      '什麼東西你共三小。',
+      '哈哈哈哈哈哈哈哈！',
+      '一直叫，你4不4想拔嘴人家？',
+      '一直叫，你想被淨灘嗎？',
+      '幫主你也敢嘴？',
+      '拔嘴的話，我的嘴巴會長出觸手，然後開花成四個花瓣哦 (´×`)',
+      '看看我！！我體內的怪物已經這麼大了！！',
+      '傳說中，凡是拔嘴過鴨嘴獸的人，有高機率在100年內死去。 \n我到底在共三小。',
+      '人類每花60秒拔嘴，就減少一分鐘的壽命。 \n我到底在共三小。',
+      '嘴被拔，就會掉。',
+      '你在大聲什麼啦！！！！',
+      '公道價，八萬一（伸手）。',
+      '你的嘴裡有異音（指）', 
+      '噓，安靜跑個團，很難？',
+      '斷！',
+      '在場沒有一個比我帥。',
+      '我不是針對你，我是說在場各位，都是垃圾。',
+      '你知道你很機掰嗎？',
+      '快 …扶我去喝酒 ……',
+      '好好好，下去領五百。',
+      '噁噁噁，躺著也中槍。',
+      '現在放棄的話，假期就開始了。',
+      '努力不一定會成功，但是不努力的話，就會很輕鬆喔。',
+      '這種要求，我還是第一次聽到（啃咬）',
+      '你先承認你有病再說。',
+      '想被我切八段嗎臭婊子。',
+      'ｅｒｒｏｒ：齁，你把鴨霸獸弄壞了。準備迎接幫眾的怒火吧。',
+      '幫主說，有人打你的左臉，你就要用肉食性猛擊咬斷他的小腿。'];
     return rplyArr[Dice(rplyArr.length)-1];
   }
 
 }
 
+function Yababang(inputStr) {
+  let rplyArr = inputStr.split(' ');
+  let pl = rplyArr[1];
+  if (rplyArr.length == 1) return '想要挑戰入幫測驗，就把格式打好啊幹！';
+  if (inputStr.match('yabaso') != null||inputStr.match('巴獸') != null||inputStr.match('鴨巴') != null||inputStr.match('鴨嘴獸') != null||inputStr.match('幫主') != null||inputStr.match('泰瑞') != null) return '幫主好！幹，那邊那個菜比巴，看到幫主不會敬禮啊，想被淨灘是不是？！';
+  
+  //關卡設定
+  let challenge = [
+  {
+    stage: 1,
+    good:[
+      '「口桀口桀口桀，沒有大捏捏的人是無法通過我言青問這一關的。」請問站在通往下一關的通道前對著你這樣說。\n'+pl+'拿出手機，在請問的面前課了一單明星三缺一，成為了請問的衣食父母，通過了關卡。',
+
+      '你看到一個牌子寫著測驗入口，鴨霸幫的傳統測驗第一關就是攀登末日火山，穿越幽暗水道，戰勝九頭蜥蜴，並且躍過無底深淵。\n\n但'+pl+'偵查大成功，看到底下的小字寫著「抖內幫主吃上引水產就可以直接通過第一關」，你拿出魔法小卡結束了這個回合。',
+
+      '一陣寒風襲來，讓你不寒而慄，眼前的人影逐漸顯現，披著披風掩蓋著對方的面孔。他問你：\n「你吃薯餅都沾什麼醬？」\n\n'+pl+'岔開了話題，「先不提這個了，你先來幫我查一下高鐵。」\n\n眼前的人影親切的教了你高鐵時刻表要怎麼訂票，心滿意足的離去了。真是親切的人呢。',
+
+      '走進房間，你面前出現一張小桌子，兩旁放著椅子。桌上有著一盒十二顆裝的馬卡龍，上面寫著「for Dear」。\n當你開心的拿起時，你看到了下面的字樣寫著：「給ㄌㄒ。」\n\n'    +pl+'不屑的翻掉桌子，嘲諷的說：「我不需要女朋友也可以寫出超華麗的開場啦幹！」\n你瀟灑離開，無視身後好像有人哭著大喊我的：「我的馬卡龍！！！」',
+
+      '你的眼前出現了一個正在嚎啕大哭的貓耳小女孩，眼淚彷彿噴泉一樣\n一邊哭一邊喊道，「為什麼你們每天都可以一直玩？」\n\n'
+      +pl+'面無表情的說：「因為我有本錢玩阿，關你屁事。」\n你無視了錯愕的女孩，拂袖離去。'],
+    
+    bad:[
+      '「口桀口桀口桀，沒有大捏捏的人是無法通過我言青問這一關的。」請問站在通往下一關的通道前對著你這樣說。\n\n'+pl+'抓了抓頭，請問覺得你抓頭的樣子很像猴子，於是用慘絕人寰的方式殺害了你。',
+
+      '你看到一個牌子寫著測驗入口，鴨霸幫的傳統測驗第一關就是攀登末日火山，穿越幽暗水道，戰勝九頭蜥蜴，並且躍過無底深淵。\n\n'+pl+'奮勇的接受挑戰，但是在和九頭蜥蜴PK脫衣麻將的時候輸到連內褲都不剩了。',
+
+      '一陣寒風襲來，讓你不寒而慄，眼前的人影逐漸顯現，披著披風掩蓋著對方的面孔。他問你：\n「你吃薯餅都沾什麼醬？」\n\n'+pl+'戰戰兢兢的回答：「番、番茄醬……？」\n\n於是迎來了殘忍的死亡。',
+
+      '走進房間，你面前出現一張小桌子，兩旁放著椅子。桌上有著一盒十二顆裝的馬卡龍，上面寫著「for Dear」。\n當你開心的拿起時，你看到了下面的字樣寫著：「給ㄌㄒ。」\n\n'+pl+'忽然眼前一黑，你才想起今天出門的時候忘了戴墨鏡，看來是被閃瞎了。',
+
+      '你的眼前出現了一個正在嚎啕大哭的貓耳小女孩，眼淚彷彿噴泉一樣\n一邊哭一邊喊道，「為什麼你們每天都可以一直玩？」\n\n「我…我才沒有一直在玩呢！」'+pl+'這樣辯解道。\n但女孩忽然衝上前來抓住你，強迫你在Steam上買了一個叫做「100% Orange juice」的遊戲。\n\n女孩把你養在地下室裡，只有她需要橘子汁的咖的時候才會把你放出來。']
+  },
+  {  
+    stage: 2,
+    good: [
+      '「科科科，沒想到你能走到這裡，不過也到極限了，接下來就讓柯基來當你的對手吧！」一群柯基科科科的叫著撲了上去。\n\n'    +pl+'成功將柯基做成三杯基，配著台啤吃得酒足飯飽。',
+
+      '一位男子出現在'+pl+'的眼前，他說「辛苦你能來到這裡呢，接下來就由我默兒陪你繼續踏上旅途吧。」\n\n你的靈感忽然過了，用了百米25秒的速度逃離了默兒。',
+
+      '你的手機突然亮起，Line上傳來了不知名的訊息。\n\n「巴獸真的很嚴格。」\n「比我想像的嚴格！」\n「幫我把這幾句Keep起來。」\n\n奇怪的訊息出現了，到底要怎麼Keep才是正確的呢？\n\n﹁\n巴\n比\n幫\n﹂\n\n你把這三句話的頭三個字Keep了下來然後回傳了回去，雖然甚麼事情都沒發現，但是你感覺你似乎度過了這場試煉。',
+
+      '在你面前突然出現了一座小島！！！\n該怎麼辦呢？\n\n「這座小島陸沉了！」你指著小島大喊，小島彷彿有生命一般的直接沉入了海底。\n你昂首闊步，完全不回頭。',
+      
+      '一名穿著粉色變身少女服裝的男子出現在你的面前，比出了代替月亮逞罰你的姿勢      「別想，接下來就由我光之美少女——閃亮黑熊作你的對手吧，理性閃亮史巴扣！」\n\n'+pl+'不慌不忙的詠唱著「黑熊熊穿浴衣👘～黑熊熊穿浴衣👘～耶嘿～」，黑熊醬害羞的帶起馬頭面具，抱著巫女服跑走了。'      
+    ],
+    
+    
+    bad:[
+      '「科科科，沒想到你能走到這裡，不過也到極限了，接下來就讓柯基來當你的對手吧！」一群柯基科科科的叫著撲了上去。\n\n'+pl+'的line群頁面充斥著柯基的貼圖，從此你看到柯基的line貼圖都會喚起現在的心靈創傷。',
+
+      '一位男子出現在'+pl+'的眼前，他說「辛苦你能來到這裡呢，接下來就由我默兒陪你繼續踏上旅途吧。」\n\n你與默兒踏上了旅途之後，不知為何敵人的攻擊總是落到了你的身上，漸漸的你也失去了繼續前進的力量，倒在了不知名的路上。',
+
+      '你的手機突然亮起，Line上傳來了不知名的訊息。\n\n「巴獸真的很嚴格。」\n「比我想像的嚴格！」\n「幫我把這幾句Keep起來。」\n\n奇怪的訊息出現了，到底要怎麼Keep才是正確的呢？\n\n你穩扎穩打的把三句話都完完整整的Keep下來。就在你信心滿滿的回傳回去的瞬間……\n\n你被一個布袋給蓋住了頭，遮蔽了視野。\n\n「居然敢瞧不起我們巴比幫的，來人！給我打！」\n\n你就這樣在一陣混亂中，被亂棍打死了……',
+
+      '在你面前突然出現了一座小島！！！\n該怎麼辦呢？\n\n「小島上出現了許多柯基！」你大喊。\n彷彿應和你的要求一般，小島上出現了大量的柯基犬，屁顛屁顛的蹭著你。\n\n「然後出現了大量的高麗菜！」你興致更高的大喊。隨即小島上就出現了大量的高麗菜，柯基們都像發了瘋似的瘋狂啃食這些不速之菜。\n\n你玩的不亦樂乎，沉醉在這個自己可以呼風喚雨的小島上。\n但你沒發現，這座小島在你不注意的時候，已經漂離凡世越來越遠、越來越遠……你就這樣與這座小島消失在虛空之中。',
+
+      '一名穿著粉色變身少女服裝的男子出現在你的面前，比出了代替月亮逞罰你的姿勢      「別想，接下來就由我光之美少女——閃亮黑熊作你的對手吧，理性閃亮史巴扣！」\n\n看見除此的美貌，'+pl+'不由得心動，口中喃喃的說著，「…黑熊醬…像黑熊醬這麼可愛的女孩，沒有男朋友，實在…太不可思議了。」\n\nこのあと滅茶苦茶セックスした'    
+    ]
+  },
+  {  
+    stage: 3,
+    good:[
+    '「cc(2)<=1 古小蜜學」「(1D100<=1) → 46、96、16 → 16 → 失敗」'+pl+'看到一群人說著你不懂的語言。\n\n你露出了輕蔑的微笑說「cc(2)<=1 請問佑我！」\n「(1D100<=1) → 21、1、91 → 1 → 恭喜！大成功！」\n\n區區2.7%的機率對天選之人算得了什麼，你揚長而去。',
+
+    '一頭巨大的，頭上寫著「大家的小三」的倉鼠出現在'+pl+'的眼前，他說：「你怎麼會玩這個一點意義都沒有的無聊遊戲？聽話，乖，回去吃你的飯備你的團寫你的程式背你的英文單字好好的過你的生活，放棄入幫測驗吧。」\n\n你不慌不忙的拿出line keep，倉鼠就一邊哭一邊拖著行李箱離家出走了。',
+
+    '你踏進第三關的房間。突然，你周遭的空氣變得非常寒冷，燈光也變得幽暗下來。你感到一股由骨髓深處竄出的寒冷。正當你不知所措的時候。從你背後傳來了一個可怕的聲音……\n\n「……你４不４……」話語到這裡就中斷了。\n\n話語到這裡就中斷了。你站立在原地，不知如何是好。\n但聲音也沒有進一步的舉動，看來是在等待你的回應。\n\n「你４不４想拔嘴人家！！！」你毫不猶豫的大聲回答。\n「你４在大聲甚麼啦！」後面的聲音也７ｐｕｐｕ的吼了回來！\n\n就當你猛然轉頭回去的瞬間，周遭的空氣變回平常的溫度，而燈光也不知何時恢復了。\n你似乎突破了這個試煉。'],
+    bad:[
+      '「cc(2)<=1 古小蜜學」「(1D100<=1) → 46、96、16 → 16 → 失敗」'+pl+'看到一群人說著你不懂的語言。\n\n當你正準備逃跑的時候他們忽然衝了上來，口吐褻瀆的語句：\n「cc(2)<=10 請問學」「cc(2)<=10 柯基學」「cc(2)<=10 ㄌㄌ學」將你淹沒了。',
+
+      '一頭巨大的，頭上寫著「大家的小三」的倉鼠出現在'+pl+'的眼前，他說：「你怎麼會玩這個一點意義都沒有的無聊遊戲？聽話，乖，回去吃你的飯備你的團寫你的程式背你的英文單字好好的過你的生活，放棄入幫測驗吧。」\n\n看著倉鼠柔軟的毛皮和水靈靈的大眼睛，你的鬥志全消，覺得自己被掰彎了。',
+
+      '你踏進第三關的房間。突然，你周遭的空氣變得非常寒冷，燈光也變得幽暗下來。你感到一股由骨髓深處竄出的寒冷。正當你不知所措的時候。從你背後傳來了一個可怕的聲音……\n\n「……你４不４……」話語到這裡就中斷了。\n\n話語到這裡就中斷了。你站立在原地，不知如何是好。\n但聲音也沒有進一步的舉動，看來是在等待你的回應。\n\n「……想幹人家？」思考了一陣子，你把這句句子給完成了。\n「…答錯惹……」聲音顯得有點哀傷。\n\n七天之後，你那嘴巴被拔掉的悽慘屍體被人發現在東海岸的沙灘上。']
+  },
+  {  
+    stage: 4,
+    good:[
+      '「可惡！我也想上鴨霸幫挑戰！」一隻非常擅長密室逃脫的他口擋住了你的去路，「我也想要當關主啊！」\n\n'+pl+'正想說什麼的時候，忽然有個人跳出來說，「那你就去投稿啊幹！」，他口就哭著跑走了。雖然你一頭霧水但還是平安的通過了這一關。',
+
+      '「哼哼哼，沒想到你能到第四關呢，不過也到極限了，接下來就讓我鎖鏈桑尼來當你的對手吧！」桑尼揮舞著鎖鏈，虎虎生風。\n\n'+pl+'淡定的說出：「神奇寶貝主題曲」這幾個字，桑尼便跪倒在地，默默流下兩行眼淚。',
+
+      '你來到了一個舊玩具回收站。一個面容和善、但似乎好像在電視上看過的女性靠近了你。\n\n「你好，我想問你，要如何才能把舊玩具變成新玩具呢？」\n\n「當然是學習交換與分享！」你豎起大拇指。\n女性高興的點點頭，遞給你一塊栗子泥蛋糕作為通關的證明，然後一個轉眼就消失了。'],
+    bad:[
+      '「可惡！我也想上鴨霸幫挑戰！」一隻非常擅長密室逃脫的他口擋住了你的去路，「我也想要當關主啊！」\n\n'+pl+'躡手躡腳地想要從他身邊繞過去，殊不知他忽然說「算了，反正就算我當不成關主，我還有很多妹子。要妹子，找他口。」\n你聽到這樣的話之後受到了相當的心靈創傷，一蹶不振。',
+
+      '「哼哼哼，沒想到你能到第四關呢，不過也到極限了，接下來就讓我鎖鏈桑尼來當你的對手吧！」桑尼揮舞著鎖鏈，虎虎生風。\n\n'+pl+'被飛舞的鎖鏈給迷惑，陷入了深深的幻境……當你重新醒過來的時候，什麼都不記得，只留下深深的恐懼。',
+
+      '你來到了一個舊玩具回收站。一個面容和善、但似乎好像在電視上看過的女性靠近了你。\n\n「你好，我想問你，要如何才能把舊玩具變成新玩具呢？」\n\n「當然是課金抽抽抽！」你豎起大拇指。\n\n女性的臉沉了下來，正當你想開口再說些甚麼時，你的視線卻突然越來越後退。在你的視野中，你只看到那個女性，以及站在女性前面的那個。已失去頭顱的、你的身體……\n\n還有被撕裂的小腿肚。']
+  },
+  {  
+    stage: 5,
+    good:[
+    '終於來到最後的考驗現場，只見一個男子站在房間的正中，他說：「你以為你現在正在參加鴨霸幫的入幫測驗嗎？不，這都是你的錯覺，其實你只不過是我的副人格而已。」\n\n'+pl+'聽到這樣的話語，只遲疑了一下，說：「阿歐西，你有空在這邊練肖威，還不快去把你的協作平台弄好，都拖多久了？」\n\n男子聽到之後，不由自主的雙腿一軟，但你還是繼續說道：「有空在這邊加鴨霸獸的功能，不會去把復興南村的下一個劇本寫出來嗎？」\n\n男子咳出一口鮮血，倒臥在地。你就這樣跨過了他的身體，通過了最後的試煉。',
+
+    pl+'來到了最後考驗的現場，鴨霸幫的幫主——鴨巴獸坐在王座上，她的左手拿著包子、右手拿著鍋貼，眼神似乎要你選擇的樣子。\n\n你微微一笑，指著座上的鴨巴獸說：「真正的鴨巴獸根本不會拿著這種東西，你一定是軒哥假扮的！」\n軒哥冷笑了兩聲，扯下面具，「真虧你能看得出來，看來我該讓腎了。」他打開了最後的大門，你走出大門，通過了最後的試煉。'],
+    bad:[
+      '終於來到最後的考驗現場，只見一個男子站在房間的正中，他說：「你以為你現在正在參加鴨霸幫的入幫測驗嗎？不，這都是你的錯覺，其實你只不過是我的副人格而已。」\n\n'+pl+'聽到這樣的話語，陷入了長考——難、難道我，只是一個幻想出來的人格嗎？我所認知的世界，都是虛幻嗎？！'+pl+'的身軀逐漸崩解，被吸入男子的影子當中。他微笑著說，「整個湯群，都是我的副人格。」',
+
+      pl+'來到了最後考驗的現場，鴨霸幫的幫主——鴨巴獸坐在王座上，她的左手拿著包子、右手拿著鍋貼，眼神似乎要你選擇的樣子。\n\n你戰戰兢兢的，指著她右手的鍋貼，此時巴獸用迅雷不及掩耳盜鈴的速度用鍋貼把你的眼睛挖出來，再把包子塞到你的鼻孔裡，最後撕裂了你的小腿肚。\n\n在你朦朧的意識即將消失前，你聽到幫主說：「幹你媽的我最討厭的就是包子和鍋貼。」']
+  }
+    
+  
+  ]
+  
+  
+  //開始迴圈部分
+  
+  let stage = 1;
+  let DeadOrNot = 0;
+  let pinch = 50 + Dice(50);
+  let reply = '本次入幫測驗挑戰者是【' + pl + '】，鴨霸幫萬歲！';
+  
+  for (; DeadOrNot == 0; stage++){
+  reply = reply + '\n\n================\n' + '【'+ pl+'挑戰第' + stage +'關】\n' ;
+    
+    if(Dice(100) <= pinch){
+      reply = reply + challenge[stage-1].good[Dice(challenge[stage-1].good.length)-1];
+      pinch = pinch - Dice(8);
+    }
+    else {
+      reply = reply + challenge[stage-1].bad[Dice(challenge[stage-1].bad.length)-1];
+      DeadOrNot = 1;
+      reply = reply + '\n\n================\n勝敗乃兵家常事，大俠請重新來過吧。\n或者你可以直接月付1999加入白銀幫眾。';
+    }
+    
+    if (stage ==5 && DeadOrNot == 0) {
+    DeadOrNot = 2 ;    
+    }
+  }
+  
+  if (DeadOrNot == 2) reply = reply + '\n\n================\n恭喜【'+pl+'】成功存活，成為新一代的鴨霸幫幫眾。\n請到隔壁的櫃檯繳納會費，然後期待下一次淨灘的時候你還可以存活下來。';
+      
+  return reply;
+}
