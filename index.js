@@ -781,20 +781,7 @@ function YabasoReply(inputStr) {
 		 '你還是，不要知道比較好',
 		 '這應該不關我的事','這應該不關我的事','這應該不關我的事','這應該不關我的事','這應該不關我的事'];
 	  
-    var ReceivedMessage = isRock.LineBot.Utility.Parsing(postData);
-    var item = ReceivedMessage.events.FirstOrDefault();
-    string Message = "";
-	  
-	  LineUserInfo UserInfo = null;
-            if (item.source.type.ToLower() == "room")
-                UserInfo = isRock.LineBot.Utility.GetRoomMemberProfile(
-                    item.source.roomId, item.source.userId, ChannelAccessToken);
-            if (item.source.type.ToLower() == "group")
-                UserInfo = isRock.LineBot.Utility.GetGroupMemberProfile(
-                    item.source.groupId, item.source.userId, ChannelAccessToken);
-
-	            if (item.source.type.ToLower() != "user")  
-    return '今天' + UserInfo.displayName + ReceivedMessage.events[0].message.text +' 的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
+    return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
 
 
