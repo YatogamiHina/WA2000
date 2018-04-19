@@ -793,7 +793,7 @@ function YabasoReply(inputStr) {
                 UserInfo = isRock.LineBot.Utility.GetGroupMemberProfile(
                     item.source.groupId, item.source.userId, ChannelAccessToken);
 
-	  
+	            if (item.source.type.ToLower() != "user")  
     return '今天' + UserInfo.displayName + ReceivedMessage.events[0].message.text +' 的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
 
