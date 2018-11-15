@@ -765,7 +765,7 @@ function YabasoReply(inputStr) {
 	let temp;
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
    
-    rplyArr = [' '];
+    rplyArr = [];
     
     temp = rplyArr[Dice(rplyArr.length)-1];
 	    
