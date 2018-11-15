@@ -765,11 +765,10 @@ function YabasoReply(inputStr) {
 	let temp;
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
    
-    rplyArr = [];
     
     temp = rplyArr[Dice(rplyArr.length)-1];
 	    
-	    while(temp.match('WA2000') != null || temp.match('選') != null || temp.match('挑') != null || temp.match('決定') != null){
+	    if(temp.match('WA2000') != null || temp.match('選') != null || temp.match('挑') != null || temp.match('決定') != null){
 		    temp = rplyArr[Dice(rplyArr.length)-1];
 	    }
 	Answer = temp;    
