@@ -763,7 +763,12 @@ function YabasoReply(inputStr) {
     let Answer = rplyArr[Dice(rplyArr.length)-1];
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
 
-      Answer = rplyArr[Dice(rplyArr.length)-1];
+      rplyArr[Dice(rplyArr.length)-1];
+	    
+	    while(rplyArr[Dice(rplyArr.length)-1] != WA2000 && rplyArr[Dice(rplyArr.length)-1] != 選 && rplyArr[Dice(rplyArr.length)-1] != 挑 && rplyArr[Dice(rplyArr.length)-1] != 決定){
+		    rplyArr[Dice(rplyArr.length)-1];
+	    }
+	Answer = rplyArr[Dice(rplyArr.length)-1];    
     }
     return '我想想喔……我覺得，' + Answer + '。';
   }
