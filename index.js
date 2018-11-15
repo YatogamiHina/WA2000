@@ -765,8 +765,8 @@ function YabasoReply(inputStr) {
 
       rplyArr[Dice(rplyArr.length)-1];
 	    
-	    while(rplyArr[Dice(rplyArr.length)-1] != WA2000 && rplyArr[Dice(rplyArr.length)-1] != 選 && rplyArr[Dice(rplyArr.length)-1] != 挑 && rplyArr[Dice(rplyArr.length)-1] != 決定){
-		    rplyArr[Dice(rplyArr.length)-1];
+	    if(rplyArr[Dice(rplyArr.length)-1] == WA2000 || rplyArr[Dice(rplyArr.length)-1] == 選 || rplyArr[Dice(rplyArr.length)-1] == 挑 || rplyArr[Dice(rplyArr.length)-1] == 決定){
+		    Dice(rplyArr.length)-1;
 	    }
 	Answer = rplyArr[Dice(rplyArr.length)-1];    
     }
