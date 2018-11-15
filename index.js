@@ -766,7 +766,7 @@ function YabasoReply(inputStr) {
 
     temp = rplyArr[Dice(rplyArr.length)-1];
 	    
-	    while(temp == WA2000 || temp == 選 || A == 挑 || temp == 決定){
+	    while(temp.match('WA2000') != null || temp.match('選') != null || temp.match('挑') != null || temp.match('決定') != null){
 		    temp = rplyArr[Dice(rplyArr.length)-1];
 	    }
 	Answer = temp;    
