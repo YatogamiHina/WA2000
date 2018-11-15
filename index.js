@@ -760,12 +760,11 @@ function YabasoReply(inputStr) {
 
     if (rplyArr.length == 1) return '指揮官連格式都打不好嗎，你還是去死吧';
 
-    let temp = rplyArr[Dice(rplyArr.length)-1];
-    let Answer;
-	
+    let Answer = rplyArr[Dice(rplyArr.length)-1];
+	let temp;
     if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
 
-     temp = rplyArr[Dice(rplyArr.length)-1];
+    temp = rplyArr[Dice(rplyArr.length)-1];
 	    
 	    while(temp == WA2000 || temp == 選 || A == 挑 || temp == 決定){
 		    temp = rplyArr[Dice(rplyArr.length)-1];
