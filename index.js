@@ -758,7 +758,7 @@ function YabasoReply(inputStr) {
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
 
-    if (rplyArr.match('WA2000 選') != null || rplyArr.match('WA2000 挑') != null || rplyArr.match('WA2000 決定') != null)
+    if (rplyArr.length == 1)
 	    return '指揮官連格式都打不好嗎，你還是去死吧';
 
     let Answer = rplyArr[Dice(rplyArr.length)-1];
