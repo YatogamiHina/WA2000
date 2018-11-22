@@ -791,7 +791,7 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
-   
+ /*  
   if(inputStr.match('猜拳') != null){
 	  actions.Add(new isRock.LineBot.MessageActon()
 		      { label = "剪刀", text = "剪刀" });
@@ -853,7 +853,7 @@ function YabasoReply(inputStr) {
 	  }	  
 	  
   }
-
+*/
 
   //沒有觸發關鍵字則是這個
   else{
