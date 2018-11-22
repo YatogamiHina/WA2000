@@ -754,7 +754,7 @@ function Shambler(inputStr){
 
 function YabasoReply(inputStr) {
 
-  //鴨霸獸幫我選～～
+  //選擇障礙
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
 
@@ -791,7 +791,68 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
+   
+  if(inputStr.match('猜拳') != null){
+	  actions.Add(new isRock.LineBot.MessageActon()
+		      { label = "剪刀", text = "剪刀" });
 
+	  actions.Add(new isRock.LineBot.MessageActon()
+		      { label = "石頭", text = "石頭" });
+
+          actions.Add(new isRock.LineBot.MessageActon()
+		      { label = "布", text = "布" });
+	  
+	  let rplyArr = ['剪刀' , '石頭' , '布'];
+	  
+	  if(inputStr.match('剪刀') != null){
+		  let temp;
+		  
+		  temp = rplyArr[Dice(rplyArr.length)-1];
+		  
+		  if(temp == ('剪刀'))
+			  return '剪刀\n' + '居然平手嗎... 下次我會贏指揮官的';
+		  
+	          if(temp == ('石頭'))
+			  return '石頭\n' + '看來指揮官也不過如此嗎 哼哼';
+		  
+		  if(temp == ('布'))
+			  return '布\n'  + '哼 這次只是讓指揮官贏的';	  
+	  
+	  }
+
+	  if(inputStr.match('石頭') != null){
+		  let temp;
+		  
+		  temp = rplyArr[Dice(rplyArr.length)-1];
+		  
+		  if(temp == ('石頭'))
+			  return '石頭\n' + '居然平手嗎... 下次我會贏指揮官的';
+		  
+	          if(temp == ('布'))
+			  return '布\n' + '看來指揮官也不過如此嗎 哼哼';
+		  
+		  if(temp == ('剪刀'))
+			  return '剪刀\n'  + '哼 這次只是讓指揮官贏的';	  
+	  
+	  }	  
+
+	  if(inputStr.match('布') != null){
+		  let temp;
+		  
+		  temp = rplyArr[Dice(rplyArr.length)-1];
+		  
+		  if(temp == ('布'))
+			  return '布\n' + '居然平手嗎... 下次我會贏指揮官的';
+		  
+	          if(temp == ('剪刀'))
+			  return '剪刀\n' + '看來指揮官也不過如此嗎 哼哼';
+		  
+		  if(temp == ('石頭'))
+			  return '石頭\n'  + '哼 這次只是讓指揮官贏的';	  
+	  
+	  }	  
+	  
+  }
 
 
   //沒有觸發關鍵字則是這個
