@@ -820,19 +820,7 @@ function YabasoReply(inputStr) {
 	  
 	  }
 
-	  if(inputStr.match('石頭') != null){
-		  let temp;
-		  
-		  temp = rplyArr[Dice(rplyArr.length)-1];
-		  
-		  if(temp == ('石頭'))
-			  return '石頭\n' + '居然平手嗎... 下次我會贏指揮官的';
-		  
-	          if(temp == ('布'))
-			  return '布\n' + '看來指揮官也不過如此嗎 哼哼';
-		  
-		  if(temp == ('剪刀'))
-			  return '剪刀\n'  + '哼 這次只是讓指揮官贏的';	  
+  
 	  
 	  }	  
 
