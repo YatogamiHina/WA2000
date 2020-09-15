@@ -792,6 +792,30 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
+	
+const { text } = context.event;
+if (/^WA2000學說話;([^;]+);([^;]+)$/.test(text)) {
+  // 斷開後第一個部分是「卡米狗學說話」，可以直接忽略它
+  const [, key, val] = text.split(';');
+  
+  // 如果沒有教過就初始化
+  if (!db.map[key]) db.map[key] = [];
+  
+  // 記錄到列表中
+  db.map[key].push({
+    sessionId: context.session.id,
+    keyword: key,
+    message: val,
+  });
+  
+  // 這整段程式碼會放到 async function 中，所以可以等待這個 promise
+  await context.replyText('好哦~好哦~*1');
+	
+	
+	
+	
+	
+	
  /*  
   if(inputStr.match('猜拳') != null){
 	  actions.Add(new isRock.LineBot.MessageActon()
