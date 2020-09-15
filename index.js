@@ -792,7 +792,7 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
-	
+/*	
 const { text } = context.event;
 if (/^WA2000學說話;([^;]+);([^;]+)$/.test(text)) {
   // 斷開後第一個部分是「卡米狗學說話」，可以直接忽略它
@@ -811,7 +811,7 @@ if (/^WA2000學說話;([^;]+);([^;]+)$/.test(text)) {
   // 這整段程式碼會放到 async function 中，所以可以等待這個 promise
   await context.replyText('好哦~好哦~*1');
 	
-	
+	*/
 	
 	
 	
