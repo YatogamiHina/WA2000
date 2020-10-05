@@ -160,6 +160,9 @@ function parseInput(rplyToken, inputStr) {
 
         if (inputStr.match('召喚空鬼') != null) return Shambler(inputStr) ;
         else
+	
+	if(inputStr.match('猜拳') != null) return fingerguess(inputStr) ;
+	else
 
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -792,81 +795,40 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
-/*	
-const { text } = context.event;
-if (/^WA2000學說話;([^;]+);([^;]+)$/.test(text)) {
-  // 斷開後第一個部分是「卡米狗學說話」，可以直接忽略它
-  const [, key, val] = text.split(';');
-  
-  // 如果沒有教過就初始化
-  if (!db.map[key]) db.map[key] = [];
-  
-  // 記錄到列表中
-  db.map[key].push({
-    sessionId: context.session.id,
-    keyword: key,
-    message: val,
-  });
-  
-  // 這整段程式碼會放到 async function 中，所以可以等待這個 promise
-  await context.replyText('好哦~好哦~*1');
-	
-	*/
 	
 	
-	
-	
- /*  
-  if(inputStr.match('猜拳') != null){
-	  actions.Add(new isRock.LineBot.MessageActon()
-		      { label = "剪刀", text = "剪刀" });
+//以下就是LineBot選單的格式
+var guess={
+    type: 'template',
+    altText: 'this is a confirm template',
+    template: {
+        type: 'buttons',
+        text: '按下選單可以控制物聯網裝置！\n輸入?可以再看到這個選單！',
+        actions: 
+	[
+		{
+			type: 'postback',
+			label: '石頭',
+			data: '石頭'
+		},
+		{
+			type: 'postback',
+			label: '剪刀',
+			data: '剪刀'
+		},
+		{
+			type: 'postback',
+			label: '布',
+			data: '布'
+		}
+	]
+    }
+};
 
-	  actions.Add(new isRock.LineBot.MessageActon()
-		      { label = "石頭", text = "石頭" });
-
-          actions.Add(new isRock.LineBot.MessageActon()
-		      { label = "布", text = "布" });
-	  
-	  let rplyArr = ['剪刀' , '石頭' , '布'];
-	  
-	  if(inputStr.match('剪刀') != null){
-		  let temp;
-		  
-		  temp = rplyArr[Dice(rplyArr.length)-1];
-		  
-		  if(temp == ('剪刀'))
-			  return '剪刀\n' + '居然平手嗎... 下次我會贏指揮官的';
-		  
-	          if(temp == ('石頭'))
-			  return '石頭\n' + '看來指揮官也不過如此嗎 哼哼';
-		  
-		  if(temp == ('布'))
-			  return '布\n'  + '哼 這次只是讓指揮官贏的';	  
-	  
-	  }
-
-  
-	  
-	  }	  
-
-	  if(inputStr.match('布') != null){
-		  let temp;
-		  
-		  temp = rplyArr[Dice(rplyArr.length)-1];
-		  
-		  if(temp == ('布'))
-			  return '布\n' + '居然平手嗎... 下次我會贏指揮官的';
-		  
-	          if(temp == ('剪刀'))
-			  return '剪刀\n' + '看來指揮官也不過如此嗎 哼哼';
-		  
-		  if(temp == ('石頭'))
-			  return '石頭\n'  + '哼 這次只是讓指揮官贏的';	  
-	  
-	  }	  
-	  
-  }
-*/
+function fingerguess(inputStr){
+	if(inputStr.match('猜拳') != null)
+		return guess
+}
 
   //沒有觸發關鍵字則是這個
   else{
