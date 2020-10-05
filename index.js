@@ -827,7 +827,7 @@ var guess={
 
 function fingerguess(inputStr){
 	if(inputStr.match('猜拳') != null)
-		return guess
+		return guess;
 }
 
   //沒有觸發關鍵字則是這個
