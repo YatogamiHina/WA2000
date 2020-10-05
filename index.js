@@ -795,7 +795,7 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
-	
+/*	
 	
 //以下就是LineBot選單的格式
 var guess={
@@ -830,7 +830,7 @@ function fingerguess(inputStr){
 		let reply =  guess;
 	return reply;
 }
-
+*/
   //沒有觸發關鍵字則是這個
   else{
     let rplyArr = [];
