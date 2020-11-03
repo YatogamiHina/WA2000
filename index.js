@@ -5,12 +5,14 @@ var app = express();
 
 var jsonParser = bodyParser.json();
 
-var options = {
+var options = 
+{
   host: 'api.line.me',
   port: 443,
   path: '/v2/bot/message/reply',
   method: 'POST',
-  headers: {
+  headers: 
+  {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer FCqFqvATGYaH/la4saJXy4zTPjLPXPTpYucDGsDhqbVBylZ/ulbO/LPIUoRRtToSv7lBSu/9UmgAPvupIHpdntCpDTNqeHQK4cIXL5Ti5wwJdShhvcXQ3pr+yHwL2JSHeVn+WfWSn4QpNm5tGpwzzAdB04t89/1O/w1cDnyilFU='
 
@@ -20,12 +22,14 @@ app.set('port', (process.env.PORT || 5000));
 
 // views is directory for all template files
 
-app.get('/', function(req, res) {
+app.get('/', function(req, res) 
+{
 //  res.send(parseInput(req.query.input));
   res.send('Hello');
 });
 
-app.post('/', jsonParser, function(req, res) {
+app.post('/', jsonParser, function(req, res) 
+{
   let event = req.body.events[0];
   let type = event.type;
   let msgType = event.message.type;
@@ -34,30 +38,39 @@ app.post('/', jsonParser, function(req, res) {
 
   let rplyVal = null;
   console.log(msg);
-  if (type == 'message' && msgType == 'text') {
-    try {
+  if (type == 'message' && msgType == 'text')
+  {
+    try 
+    {
       rplyVal = parseInput(rplyToken, msg);
     }
-    catch(e) {
+    catch(e) 
+    {
       console.log('catch error');
     }
   }
 
-  if (rplyVal) {
+  if (rplyVal) 
+  {
     replyMsgToLine(rplyToken, rplyVal);
-  } else {
+  } 
+  else 
+  {
     console.log('Do not trigger');
   }
 
   res.send('ok');
 });
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function() 
+{
   console.log('Node app is running on port', app.get('port'));
 });
 
-function replyMsgToLine(rplyToken, rplyVal) {
-  let rplyObj = {
+function replyMsgToLine(rplyToken, rplyVal) 
+{
+  let rplyObj = 
+  {
     replyToken: rplyToken,
     messages: [
       {
@@ -69,7 +82,8 @@ function replyMsgToLine(rplyToken, rplyVal) {
 
   let rplyJson = JSON.stringify(rplyObj);
 
-  var request = https.request(options, function(response) {
+  var request = https.request(options, function(response) 
+  {
     console.log('Status: ' + response.statusCode);
     console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
@@ -84,23 +98,27 @@ function replyMsgToLine(rplyToken, rplyVal) {
 }
 
 
-function SendMsg(rplyToken, rplyVal) {
-  let rplyObj = {
+function SendMsg(rplyToken, rplyVal) 
+{
+  let rplyObj = 
+  {
     replyToken: rplyToken,
     messages: rplyVal
   }
 
   let rplyJson = JSON.stringify(rplyObj);
 
-  var request = https.request(options, function(response) {
+  var request = https.request(options, function(response) 
+  {
     console.log('Status: ' + response.statusCode);
     console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
-    response.on('data', function(body) {
+    response.on('data', function(body) 
+    {
       console.log(body);
     });
   });
-  request.on('error', function(e) {
+  request.on('error', function(e){
     console.log('Request error: ' + e.message);
   })
   request.end(rplyJson);
@@ -110,7 +128,8 @@ function SendMsg(rplyToken, rplyVal) {
 //上面的部分呢，是LINE BOT能夠運轉，和伺服器的一些連結與認證有關。坦白說有很多部份我也不太確定是幹嘛用的，不要亂動比較安全。
 
 //以下是這個機器人在處理指令的核心。
-function parseInput(rplyToken, inputStr) {
+function parseInput(rplyToken, inputStr) 
+{
         //此處傳入的變數inputStr是大家輸入的文字訊息。
         //其實LineBot可以讀取的不只有文字訊息，貼圖、圖片等都可辨識。
         //但有看得懂上半段的程式碼的人可能會注意到，我們擋掉了其他的種類。只留文字訊息。
@@ -163,6 +182,9 @@ function parseInput(rplyToken, inputStr) {
 	
 	if(inputStr.match('猜拳') != null) return fingerguess(inputStr) ;
 	else
+		
+	if(inputStr.match('出題') != null) return question(inputStr) ;
+	else
 
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -178,11 +200,13 @@ function parseInput(rplyToken, inputStr) {
 }
 
 
-function DvTest(rplyToken, inputStr){
+function DvTest(rplyToken, inputStr)
+{
   let rePly = '開發者測試：\n';
 	let fumbleImgArr =['https://i.imgur.com/ju9UQzA.png','https://i.imgur.com/M3meWXu.png'];
 	let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
-	let fumble = [
+	let fumble = 
+	       [
 			{
 			type: "text",
 			text: rePly
@@ -235,7 +259,8 @@ function Dice(diceSided){
 //2D10 會變成 (5+2) ，3D8 會變成像 (2+7+5) 。最後輸出回 DiceCal 組合成像 (5+2)+(2+7+5) 的算式。
 //DiceCal他會計算出結果，然後加上等號，變成 (5+2)+(2+7+5)=21
 //之所以拆開，是因為RollDice和DiceCal在其他地方還可以拿來用，所以才拆開。
-function nomalDiceRoller(inputStr){
+function nomalDiceRoller(inputStr)
+{
 
   //先定義要輸出的Str
   //先把這個打出來，然後在過程中一點一點把它補上去，大部分的思路是這樣的。
@@ -262,13 +287,14 @@ function nomalDiceRoller(inputStr){
   //這樣就會輸出三次 2d6+1 ，所以最前面那個一定要是整數。
   //這裡的 \D 代表非數字字元；如果所有的字元都不是非數字，那就是只有整數，那就抓出來做複數擲骰。
   //如果不是只有整數，就丟進去DiceCal裡面算算看。
-  if(mutiOrNot.toString().match(/\D/)==null )  {
+  if(mutiOrNot.toString().match(/\D/)==null )  
+  {
     finalStr= '複數擲骰：'
     if(mutiOrNot>20) return '不支援20次以上的複數擲骰。';
 
-  //把第二部份分拆出來，丟進去待會要介紹的擲骰計算函數當中
-  let DiceToRoll = inputStr.toLowerCase().split(' ',2)[1];
-  if (DiceToRoll.match('d') == null) return undefined;
+    //把第二部份分拆出來，丟進去待會要介紹的擲骰計算函數當中
+    let DiceToRoll = inputStr.toLowerCase().split(' ',2)[1];
+    if (DiceToRoll.match('d') == null) return undefined;
 
     for (i=1 ; i<=mutiOrNot ;i++){
       finalStr = finalStr +'\n' + i + '# ' + DiceCal(DiceToRoll).eqStr;
@@ -285,9 +311,7 @@ function nomalDiceRoller(inputStr){
     //丟進去前檢查，第一部分是檢查如果沒有任何一部份符合骰子格式就回報undefined
     //第二部份是 d 的前後有非數字
     //第三部份是檢查是否有數字或運算符之外的字元
-    if (mutiOrNot.toString().match(/\d+d\d+/) == null||
-        mutiOrNot.toString().match(/\Dd|d\D/) != null||
-        mutiOrNot.toString().match(/[^0-9dD+\-*\/()]/) != null)
+    if (mutiOrNot.toString().match(/\d+d\d+/) == null || mutiOrNot.toString().match(/\Dd|d\D/) != null || mutiOrNot.toString().match(/[^0-9dD+\-*\/()]/) != null)
         return undefined;
 
     finalStr= '基本擲骰：\n' + DiceCal(mutiOrNot.toString()).eqStr;
@@ -315,13 +339,12 @@ function DiceCal(inputStr){
   let DiceToRoll = inputStr.toString().toLowerCase();
 
   //再檢查一次
-  if (DiceToRoll.match(/\d+d\d+/) == null||
-      DiceToRoll.match(/\Dd|d\D/) != null||
-      DiceToRoll.match(/[^0-9dD+\-*\/()]/) != null)
+  if (DiceToRoll.match(/\d+d\d+/) == null || DiceToRoll.match(/\Dd|d\D/) != null || DiceToRoll.match(/[^0-9dD+\-*\/()]/) != null)
       return undefined;
 
   //寫出算式，這裡使用while將所有「幾d幾」的骰子找出來，一個一個帶入RollDice並取代原有的部分
-  while(DiceToRoll.match(/\d+d\d+/)!=null) {
+  while(DiceToRoll.match(/\d+d\d+/)!=null) 
+  {
     let tempMatch = DiceToRoll.match(/\d+d\d+/);
     if (tempMatch.toString().split('d')[0]>200) return {eqStr :'指揮官 用腦袋好好想一想 什麼時候會要骰超過200顆以上'};
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'指揮官，這裡不支援D1和超過D500的擲骰'};
@@ -354,7 +377,8 @@ function RollDice(inputStr){
   let finalStr = '(';
 
   //接下來就是看有幾d幾，就要骰幾次骰，像是 3d6 就要做 3 次 Dice(6)，還要補上加號
-  for (let i = 1; i <= comStr.split('d')[0]; i++) {
+  for (let i = 1; i <= comStr.split('d')[0]; i++) 
+  {
     finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
   }
 
@@ -365,15 +389,15 @@ function RollDice(inputStr){
 
 
 //PBTA判定在這裡
-function pbta(inputStr){
+function pbta(inputStr)
+{
 
   //先把句首前面的一段拆出來，我不知道為什麼如果用 \S+ 會報錯，多半是變數種類的問題但我不太懂。
   let input = inputStr.toLowerCase().split(' ',2)[0];
 
   //同樣先處理報錯，先確定pb後面只有加或減
-  if(input.match(/^pb[^+\-]/) != null||
-     input.match(/[^0-9pb+\-]/) != null)
-  return undefined;
+  if(input.match(/^pb[^+\-]/) != null || input.match(/[^0-9pb+\-]/) != null)
+	  return undefined;
 
   //把pb去掉，留下後面的+-值，處理報錯
   bonus = input.replace('pb','') ;
@@ -398,22 +422,26 @@ function pbta(inputStr){
 function ccCreate(inputStr){
   //大致上的精神是，後面有數字就當作是有年齡調整的傳統創角，沒有的話就是常見的房規創角
   //如果最後面不是數字，就當作是常見的房規創角
-  if (inputStr.toLowerCase().match(/\d+$/)==null){
+  if (inputStr.toLowerCase().match(/\d+$/)==null)
+  {
     let finalStr = '《悠子、冷嵐房規創角擲骰》\n==\n骰七次3D6取五次，\n決定STR、CON、DEX、APP、POW。\n';
 
     //DiceCal又被拿出來用了
-    for (i=1 ; i<=7 ;i++){
+    for (i=1 ; i<=7 ;i++)
+    {
       finalStr = finalStr +'\n' + i + '# ' + DiceCal('3d6*5').eqStr;
     }
 
     finalStr = finalStr +'\n==\n骰四次2D6+6取三次，\n決定SIZ、INT、EDU。\n';
 
-    for (i=1 ; i<=4 ;i++){
+    for (i=1 ; i<=4 ;i++)
+    {
       finalStr = finalStr +'\n' + i + '# ' + DiceCal('(2d6+6)*5').eqStr;
     }
 
     finalStr = finalStr +'\n==\n骰兩次3D6取一次，\n決定LUK。\n';
-    for (i=1 ; i<=2 ;i++){
+    for (i=1 ; i<=2 ;i++)
+    {
       finalStr = finalStr +'\n' + i + '# ' + DiceCal('3d6*5').eqStr;
     }
 
@@ -421,7 +449,8 @@ function ccCreate(inputStr){
   }
 
   //這是傳統創角，要抓年齡出來做年齡調整值的
-  if (inputStr.toLowerCase().match(/\d+$/)!=null){
+  if (inputStr.toLowerCase().match(/\d+$/)!=null)
+  {
 
     //讀取年齡
 
@@ -434,21 +463,24 @@ function ccCreate(inputStr){
 
 
     //設定 因年齡減少的點數 和 EDU加骰次數，預設為零
-    let AdjustValue = {
+    let AdjustValue = 
+    {
       Debuff : 0,
       AppDebuff : 0,
       EDUinc : 0
     }
 
     //這裡是不同年齡的資料
-    let AdjustData = {
+    let AdjustData = 
+    {
       old : [15,20,40,50,60,70,80],
       Debuff : [5,0,5,10,20,40,80],
       AppDebuff : [0,0,5,10,15,20,25],
       EDUinc : [0,1,2,3,4,4,4]
     }
 
-    for ( i=0 ; old >= AdjustData.old[i] ; i ++){
+    for ( i=0 ; old >= AdjustData.old[i] ; i ++)
+    {
 
       AdjustValue.Debuff = AdjustData.Debuff[i];
       AdjustValue.AppDebuff = AdjustData.AppDebuff[i];
@@ -458,13 +490,16 @@ function ccCreate(inputStr){
 
     ReStr = ReStr + '==\n年齡調整：';
 
-    if (old < 20) {
+    if (old < 20) 
+    {
       ReStr = ReStr + '從STR、SIZ擇一減去' + AdjustValue.Debuff + '點\n（請自行手動選擇計算）。\n將EDU減去5點。LUK可擲兩次取高。' ;
     }
-    else if (old >= 40) {
+    else if (old >= 40) 
+    {
       ReStr = ReStr + '從STR、CON或DEX中「總共」減去' + AdjustValue.Debuff + '點\n（請自行手動選擇計算）。\n將APP減去' + AdjustValue.AppDebuff +'點。可做' + AdjustValue.EDUinc + '次EDU的成長擲骰。' ;
     }
-    else {
+    else 
+    {
       ReStr = ReStr + '可做' + AdjustValue.EDUinc + '次EDU的成長擲骰。' ;
     }
 
@@ -494,17 +529,20 @@ function ccCreate(inputStr){
 
       ReStr = ReStr + '\nＥＤＵ初始值：' + firstEDU + ' = ' + tempEDU;
 
-      for (i = 1 ; i <= AdjustValue.EDUinc ; i++){
+      for (i = 1 ; i <= AdjustValue.EDUinc ; i++)
+      {
         let EDURoll = Dice(100);
         ReStr = ReStr + '\n第' + i + '次EDU成長 → ' + EDURoll;
 
 
-        if (EDURoll>tempEDU) {
+        if (EDURoll>tempEDU) 
+	{
           let EDUplus = Dice(10);
           ReStr = ReStr + ' → 成長' + EDUplus +'點';
           tempEDU = tempEDU + EDUplus;
         }
-        else{
+        else
+	{
           ReStr = ReStr + ' → 沒有成長';
         }
       }
@@ -522,7 +560,8 @@ function ccCreate(inputStr){
 
 }
 
-function ccbg(){
+function ccbg()
+{
 
   let bg = {
     //基本描述
@@ -563,7 +602,8 @@ function ccbg(){
 
 //這裡是cc指令，也就是CoC的主要擲骰控制位置。
 //這邊的程式碼沒有那麼複雜，所以應該不會講得那麼詳細，可以自己慢慢研究，不難懂的。
-function CoC7th(rplyToken, inputStr){
+function CoC7th(rplyToken, inputStr)
+{
 
   //先判斷是不是要創角
   if (inputStr.toLowerCase().match('創角') != null||inputStr.toLowerCase().match('crt') != null)
@@ -596,14 +636,17 @@ function CoC7th(rplyToken, inputStr){
 
 
   //判斷是否為成長骰
-  if(inputStr.match(/^cc>\d+/)!=null){
+  if(inputStr.match(/^cc>\d+/)!=null)
+  {
     chack = parseInt(inputStr.split('>',2)[1]) ;
-    if (finalRoll>chack||finalRoll>95) {
+    if (finalRoll>chack||finalRoll>95) 
+    {
       let plus =  Dice(10);
       ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 成功成長' + plus +'點\n最終值為：'+ chack + '+' + plus +'='+ (chack + plus);
       return ReStr;
     }
-    else if (finalRoll<=chack) {
+    else if (finalRoll<=chack) 
+    {
       ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 沒有成長';
       return ReStr;
     }
@@ -620,9 +663,11 @@ function CoC7th(rplyToken, inputStr){
   if(Math.abs(BPDice) != 1 && Math.abs(BPDice) != 2 && BPDice != null) return 'CoC7th的獎懲骰，允許的範圍是一到兩顆哦。';
 
   //如果是獎勵骰
-  if(BPDice != null){
+  if(BPDice != null)
+  {
     let tempStr = firstRoll;
-    for (let i = 1; i <= Math.abs(BPDice); i++ ){
+    for (let i = 1; i <= Math.abs(BPDice); i++ )
+    {
       let OtherTenRoll = Dice(10);
       let OtherRoll = OtherTenRoll.toString() + OneRoll.toString();
 
@@ -662,9 +707,11 @@ function CoC7th(rplyToken, inputStr){
 
 
 	//這是在骰出大成功或大失敗時附加圖片的程式碼，可以自己研究；不想要的話整個刪掉也不影響
-	if (ReStr.match('我本人都親自幫你骰了 大失敗?! 那種結果就別在意')!= null){
-	let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
-	let fumble = [
+	if (ReStr.match('我本人都親自幫你骰了 大失敗?! 那種結果就別在意')!= null)
+	{
+		let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
+		let fumble = 
+		    [
 			{
 			type: "text",
 			text: ReStr
@@ -674,14 +721,16 @@ function CoC7th(rplyToken, inputStr){
 			originalContentUrl: fumbleImg,
 			previewImageUrl: fumbleImg
 			}
-		]
+		    ]
 		SendMsg(rplyToken, fumble);
 		return undefined;
 	}
 
-	if (ReStr.match('才不是為了指揮官幫你骰大成功呢....哼')!= null){
-	let CriImg = CriImgArr[Dice(CriImgArr.length)-1];
-	let Cri = [
+	if (ReStr.match('才不是為了指揮官幫你骰大成功呢....哼')!= null)
+	{
+		let CriImg = CriImgArr[Dice(CriImgArr.length)-1];
+		let Cri = 
+		    [
 			{
 			type: "text",
 			text: ReStr
@@ -691,7 +740,7 @@ function CoC7th(rplyToken, inputStr){
 			originalContentUrl: CriImg,
 			previewImageUrl: CriImg
 			}
-		]
+		    ]
 		SendMsg(rplyToken, Cri);
 		return undefined;
 	}
@@ -699,7 +748,8 @@ function CoC7th(rplyToken, inputStr){
           return ReStr;
 }
 
-function Byakhee(inputStr){
+function Byakhee(inputStr)
+{
     let finalStr = '拜亞基能力值\n';
     let pow = DiceCal('3d6').eqStr;
 
@@ -737,7 +787,8 @@ function DarkYoung(inputStr){
     return finalStr;
   }
 
-function Shambler(inputStr){
+function Shambler(inputStr)
+{
     let finalStr = '空鬼能力值\n';
 
     finalStr = finalStr +'\n' +  'STR:' + DiceCal('2d6+12').eqStr;
@@ -756,10 +807,12 @@ function Shambler(inputStr){
   }
 
 
-function YabasoReply(inputStr) {
+function YabasoReply(inputStr)
+{
 
   //選擇障礙
-  if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
+  if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) 
+  {
     let rplyArr = inputStr.split(' ');
 
     if (rplyArr.length <= 2)
@@ -782,7 +835,8 @@ function YabasoReply(inputStr) {
 
 
   //以下是運勢功能
-  if(inputStr.match('運勢') != null){
+  if(inputStr.match('運勢') != null)
+  {
     let rplyArr=['超大吉',
 		 '大吉','大吉','大吉','大吉','大吉',
 		 '中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉',
@@ -795,13 +849,23 @@ function YabasoReply(inputStr) {
 	  
     return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
   }
-/*	
+
+  //沒有觸發關鍵字則是這個
+  else
+  {
+    let rplyArr = [];
+    return rplyArr[Dice(rplyArr.length)-1];
+  }
+/*
+function question(inputStr)
+{
 	
 //以下就是LineBot選單的格式
 var guess={
     type: 'template',
     altText: 'this is a confirm template',
-    template: {
+    template: 
+    {
         type: 'buttons',
         text: '按下選單可以控制物聯網裝置！\n輸入?可以再看到這個選單！',
         actions: 
@@ -809,17 +873,17 @@ var guess={
 		{
 			type: 'postback',
 			label: '石頭',
-			data: '石頭'
+			text: '石頭'
 		},
 		{
 			type: 'postback',
 			label: '剪刀',
-			data: '剪刀'
+			text: '剪刀'
 		},
 		{
 			type: 'postback',
 			label: '布',
-			data: '布'
+			text: '布'
 		}
 	]
     }
@@ -831,10 +895,7 @@ function fingerguess(inputStr){
 	return reply;
 }
 */
-  //沒有觸發關鍵字則是這個
-  else{
-    let rplyArr = [];
-    return rplyArr[Dice(rplyArr.length)-1];
-  }
+	
+
 
 }
