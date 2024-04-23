@@ -3,6 +3,14 @@ var bodyParser = require('body-parser');
 var https = require('https');
 var app = express();
 
+const line = require('@line/bot-sdk');
+
+const client = new line.Client({
+  channelAccessToken: 'vfvxOQZ9OQey5ofr38gPeP3W1lr2wdnqEuxcxiL7LP7JivroJvh3WuR2nG71/ER4v7lBSu/9UmgAPvupIHpdntCpDTNqeHQK4cIXL5Ti5wxyfVzZQQpYTXlH5UJmXheeqPdl/GA2rqRkMBrvLGQYWQdB04t89/1O/w1cDnyilFU='
+});
+
+
+
 var jsonParser = bodyParser.json();
 
 var options = 
@@ -28,36 +36,198 @@ app.get('/', function(req, res)
   res.send('Hello');
 });
 
+
+const getProfile = (userId) => {
+  return request.get({
+    headers: LINE_HEADER,
+    uri: `${LINE_MESSAGING_API}/profile/${userId}`,
+    json: true,
+  });
+};
+
+
 app.post('/', jsonParser, function(req, res) 
 {
   let event = req.body.events[0];
   let type = event.type;
   let msgType = event.message.type;
   let msg = event.message.text;
+  let stk = event.message.stickerId;
   let rplyToken = event.replyToken;
-
-  let rplyVal = null;
-  console.log(msg);
-  if (type == 'message' && msgType == 'text')
-  {
-    try 
-    {
-      rplyVal = parseInput(rplyToken, msg);
-    }
-    catch(e) 
-    {
-      console.log('catch error');
-    }
+  let DisplayName;
+  
+  //const profile = await client.getProfile(event.source.userId);
+  //console.log();
+  // console.log(event.source.type)
+  let usertype = event.source.type;
+  console.log('Type: ' + usertype + ', Catch ID Success: (' + event.source.userId + ')');
+  // console.log(event.message)
+  
+  
+  
+  let groupId = event.source.groupId;
+  let userId = event.source.userId;
+  
+  if (event.source.type == 'user') {  
+      client.getProfile(userId).then((profile) => {
+          // console.log(profile.displayName); //顯示使用者名字
+          // console.log(profile.userId);
+          // console.log(profile.pictureUrl); // 顯示使用者大頭照網址
+          // console.log(profile.statusMessage) // 使用者自介內容
+          let DisplayName = profile.displayName;
+          let userId = profile.userId;
+          
+      
+      // console.log(DisplayName)
+      
+      let rplyVal = null;
+      // console.log(msg);
+      if (type == 'message' && msgType == 'text')
+      {
+        try 
+        {
+          rplyVal = parseInput(DisplayName, userId, rplyToken, msg);
+        }
+        catch(e) 
+        {
+          console.log('catch error');
+        }
+      }
+      else if (type == 'message' && msgType == 'sticker')
+      {
+        try 
+        {
+          stk = '貼圖';
+          rplyVal = parseInput(DisplayName, userId, rplyToken, stk);
+        }
+        catch(e) 
+        {
+          console.log('catch error');
+        }
+      }
+    
+      if (rplyVal) 
+      {
+        replyMsgToLine(rplyToken, rplyVal);
+      } 
+      else 
+      {
+        // console.log('Do not trigger');
+      }
+      
+      }).catch((err) => {
+        console.log('Catch displayName error');
+        console.error('Error in getProfile:', err);
+        // 錯誤處理
+       });
   }
-
-  if (rplyVal) 
-  {
-    replyMsgToLine(rplyToken, rplyVal);
-  } 
-  else 
-  {
-    console.log('Do not trigger');
-  }
+  
+  else if (event.source.type == 'group') {  
+     client.getGroupMemberProfile(groupId, userId).then((profile) => {
+         // console.log(profile.displayName); //顯示使用者名字
+         // console.log(profile.userId);
+         // console.log(profile.pictureUrl); // 顯示使用者大頭照網址
+         // console.log(profile.statusMessage) // 使用者自介內容
+         let DisplayName = profile.displayName;
+         let userId = profile.userId;
+         
+     
+     // console.log(DisplayName)
+     
+     let rplyVal = null;
+     // console.log(msg);
+     if (type == 'message' && msgType == 'text')
+     {
+       try 
+       {
+         rplyVal = parseInput(DisplayName, userId, rplyToken, msg);
+       }
+       catch(e) 
+       {
+         console.log('catch error');
+       }
+     }
+     else if (type == 'message' && msgType == 'sticker')
+     {
+       try 
+       {
+         stk = '貼圖';
+         rplyVal = parseInput(DisplayName, userId, rplyToken, stk);
+       }
+       catch(e) 
+       {
+         console.log('catch error');
+       }
+     }
+   
+     if (rplyVal) 
+     {
+       replyMsgToLine(rplyToken, rplyVal);
+     } 
+     else 
+     {
+       // console.log('Do not trigger');
+     }
+     
+     }).catch((err) => {
+       console.log('Catch displayName error');
+       console.error('Error in getProfile:', err);
+       // 錯誤處理
+      });
+ }
+ else if (event.source.type == 'room') {  
+    client.getRoomMemberProfile(groupId, userId).then((profile) => {
+        // console.log(profile.displayName); //顯示使用者名字
+        // console.log(profile.userId);
+        // console.log(profile.pictureUrl); // 顯示使用者大頭照網址
+        // console.log(profile.statusMessage) // 使用者自介內容
+        let DisplayName = profile.displayName;
+        let userId = profile.userId;
+        
+    
+    // console.log(DisplayName)
+    
+    let rplyVal = null;
+    // console.log(msg);
+    if (type == 'message' && msgType == 'text')
+    {
+      try 
+      {
+        rplyVal = parseInput(DisplayName, userId, rplyToken, msg);
+      }
+      catch(e) 
+      {
+        console.log('catch error');
+      }
+    }
+    else if (type == 'message' && msgType == 'sticker')
+    {
+      try 
+      {
+        stk = '貼圖';
+        rplyVal = parseInput(DisplayName, userId, rplyToken, stk);
+      }
+      catch(e) 
+      {
+        console.log('catch error');
+      }
+    }
+  
+    if (rplyVal) 
+    {
+      replyMsgToLine(rplyToken, rplyVal);
+    } 
+    else 
+    {
+      // console.log('Do not trigger');
+    }
+    
+    }).catch((err) => {
+      console.log('Catch displayName error');
+      console.error('Error in getProfile:', err);
+      // 錯誤處理
+     });
+}
 
   res.send('ok');
 });
@@ -66,6 +236,8 @@ app.listen(app.get('port'), function()
 {
   console.log('Node app is running on port', app.get('port'));
 });
+
+
 
 function replyMsgToLine(rplyToken, rplyVal) 
 {
@@ -81,14 +253,16 @@ function replyMsgToLine(rplyToken, rplyVal)
   }
 
   let rplyJson = JSON.stringify(rplyObj);
-
+  
+  console.log('WA2000:\n' + rplyVal);
+  
   var request = https.request(options, function(response) 
   {
-    console.log('Status: ' + response.statusCode);
-    console.log('Headers: ' + JSON.stringify(response.headers));
+    //console.log('Status: ' + response.statusCode);
+    //console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
     response.on('data', function(body) {
-      console.log(body);
+      //console.log(body);
     });
   });
   request.on('error', function(e) {
@@ -110,12 +284,12 @@ function SendMsg(rplyToken, rplyVal)
 
   var request = https.request(options, function(response) 
   {
-    console.log('Status: ' + response.statusCode);
-    console.log('Headers: ' + JSON.stringify(response.headers));
+    //console.log('Status: ' + response.statusCode);
+    //console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
     response.on('data', function(body) 
     {
-      console.log(body);
+      //console.log(body);
     });
   });
   request.on('error', function(e){
@@ -125,10 +299,13 @@ function SendMsg(rplyToken, rplyVal)
 }
 
 
+
+
+
 //上面的部分呢，是LINE BOT能夠運轉，和伺服器的一些連結與認證有關。坦白說有很多部份我也不太確定是幹嘛用的，不要亂動比較安全。
 
 //以下是這個機器人在處理指令的核心。
-function parseInput(rplyToken, inputStr) 
+function parseInput(DisplayName, userId, rplyToken, inputStr) 
 {
         //此處傳入的變數inputStr是大家輸入的文字訊息。
         //其實LineBot可以讀取的不只有文字訊息，貼圖、圖片等都可辨識。
@@ -139,7 +316,8 @@ function parseInput(rplyToken, inputStr)
 
 
         //這一段不要理他，因為我看不懂，總之留著。
-        console.log('InputStr: ' + inputStr);
+        console.log(DisplayName +  ':\n' + inputStr);
+        // console.log(DisplayName + ' (' + userId + ') :\n' + inputStr);
         _isNaN = function(obj) {
           return isNaN(parseInt(obj));
         }
@@ -149,42 +327,51 @@ function parseInput(rplyToken, inputStr)
         //以下這一串是一連串的判定，用來判斷是否有觸發條件的關鍵字。
 
         //這是我用來測試用的，可以刪掉。
-        if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr) ;
+        if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr);
         else
 
         //底下是做為一個擲骰機器人的核心功能。
         //CoC7th系統的判定在此，關鍵字是「句首的cc」，在此的判定使用正則表達式。
         //用 / / 框起來的部分就是正則表達式的範圍， ^ 代表句首，所以 ^cc 就代表句首的cc。
-        if (inputStr.toLowerCase().match(/^cc/)!= null) return CoC7th(rplyToken, inputStr.toLowerCase()) ;
+        if (inputStr.toLowerCase().match(/^cc/)!= null) return CoC7th(rplyToken, inputStr.toLowerCase());
         else
 
         //pbta系統判定在此，關鍵字是「句首的pb」。
-        if (inputStr.toLowerCase().match(/^pb/)!= null) return pbta(inputStr.toLowerCase()) ;
+        if (inputStr.toLowerCase().match(/^pb/)!= null) return pbta(inputStr.toLowerCase());
         else
 
 	//這三個是偏向玩鬧型的功能，如果說只是要擲骰可以不管。
         //鴨霸獸指令開始於此
-        if (inputStr.match('WA2000') != null) return YabasoReply(inputStr) ;
+        if (inputStr.match('WA2000') != null) return WA2000(DisplayName, inputStr);
         else
 
 	//圖片訊息在此
-        if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;
+        /*if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr);
+        else*/
+
+        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr);
         else
 
-        if (inputStr.match('召喚拜亞基') != null) return Byakhee(inputStr) ;
+        if (inputStr.match('召喚黑山羊幼仔') != null) return DarkYoung(inputStr);
         else
 
-        if (inputStr.match('召喚黑山羊幼仔') != null) return DarkYoung(inputStr) ;
-        else
-
-        if (inputStr.match('召喚空鬼') != null) return Shambler(inputStr) ;
+        if (inputStr.match('召喚空鬼') != null) return Shambler(inputStr);
         else
 	
-	if(inputStr.match('猜拳') != null) return fingerguess(inputStr) ;
-	else
-		
-	if(inputStr.match('出題') != null) return question(inputStr) ;
-	else
+    	if(inputStr.match('猜拳') != null) return fingerguess(inputStr);
+    	else
+    	
+    	// 提醒喝水
+	    if (inputStr.match('早餐') != null || inputStr.match('午餐') != null || inputStr.match('晚餐') != null || inputStr.match('宵夜') != null || inputStr.match('點心') != null || inputStr.match('下午茶') != null) return Saizeriya(rplyToken, inputStr);
+        else
+        
+        if (inputStr.match('喝') != null || inputStr.match('水') != null || inputStr.match('飲料') != null) return water(rplyToken, inputStr);
+        else
+        
+        if (inputStr.match('吃啥') != null || inputStr.match('吃什麼') != null) return Saizeriya(rplyToken, inputStr);
+        else
+        
+
 
 	//通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
@@ -236,6 +423,43 @@ return undefined;
   rePly = rePly + a +':'+ b;
   return rePly;
 
+}
+
+function water(rplyToken, inputStr)
+{
+  let rePly = '喝水';
+	let fumbleImgArr = 'https://i.imgur.com/hRl4Tai.jpeg';
+	let fumbleImg = fumbleImgArr;
+	let fumble = 
+	       [
+			{
+			type: "text",
+			text: rePly
+			},
+			{
+			type: "image",
+			originalContentUrl: fumbleImg,
+			previewImageUrl:fumbleImg
+			}
+		]
+		SendMsg(rplyToken, fumble);
+return undefined;
+}
+
+function Saizeriya(rplyToken, inputStr)
+{
+	let fumbleImgArr = 'https://i.imgur.com/J5WPhmf.jpeg';
+	let fumbleImg = fumbleImgArr;
+	let fumble = 
+	       [
+			{
+			type: "image",
+			originalContentUrl: fumbleImg,
+			previewImageUrl:fumbleImg
+			}
+		]
+		SendMsg(rplyToken, fumble);
+return undefined;
 }
 
 
@@ -807,29 +1031,23 @@ function Shambler(inputStr)
   }
 
 
-function YabasoReply(inputStr)
+function WA2000(DisplayName, inputStr)
 {
 
   //選擇障礙
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) 
   {
-    let rplyArr = inputStr.split(' ');
+    let rplyArr = inputStr.split('選');
+    rplyArr = rplyArr[rplyArr.length-1].split(' ');    
 
-    if (rplyArr.length <= 2)
+    if (rplyArr.length < 2)
 	    return '指揮官連格式都打不好嗎，你還是去死吧';
+	    
+	
+	rplyArr = rplyArr.filter(el => el);
 
     let Answer = rplyArr[Dice(rplyArr.length)-1];
-	let temp;
-    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('WA2000') != null) {
-   
-    
-    temp = rplyArr[Dice(rplyArr.length)-1];
-	    
-	    while(temp.match('WA2000') != null || temp.match('選') != null || temp.match('挑') != null || temp.match('決定') != null){
-		    temp = rplyArr[Dice(rplyArr.length)-1];
-	    }
-	Answer = temp;    
-    }
+
     return '我想想喔……我覺得，' + Answer + '。';
   }
 
@@ -837,18 +1055,69 @@ function YabasoReply(inputStr)
   //以下是運勢功能
   if(inputStr.match('運勢') != null)
   {
-    let rplyArr=['超大吉',
-		 '大吉','大吉','大吉','大吉','大吉',
-		 '中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉','中吉',
-		 '小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉','小吉',
-		 '末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉','末吉',
-		 '凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶','凶',
-		 '大凶','大凶','大凶','大凶','大凶','大凶','大凶','大凶','大凶','大凶','大凶','大凶',
-		 '你還是，不要知道比較好',
-		 '這應該不關我的事','這應該不關我的事','這應該不關我的事','這應該不關我的事','這應該不關我的事'];
+    num = Dice(100) - 1
+    let reply_index =  undefined;
+    inputStr = inputStr.split(' ').join('');  // 防呆
+
+    let rplyArr = inputStr.split('WA2000');
+    rplyArr = rplyArr[rplyArr.length-1].split('我').join(''); // 防呆
+    rplyArr = rplyArr.split('運勢');
+    rplyArr = rplyArr[0];
+
+
+   // let rplyArr=['超大吉','大吉','中吉','小吉','末吉','這應該不關我的事','凶','小凶','大凶','你還是，不要知道比較好'];
+
+   if (num == 0)
+   {
+      reply_index = '超大吉'; // 超大吉 1%
+   }
+
+   else if (num <= 5 && num > 0)
+   {
+      reply_index = '大吉'; // 大吉 5%
+   }
+   else if (num <= 15 && num > 5)
+   {
+      reply_index = '中吉'; // 中吉 10%
+   }
+   else if (num <= 35  && num > 15)
+   {
+      reply_index = '小吉'; // 小吉 20%
+   }
+
+   else if (num == 99)
+   {
+      reply_index = '你還是，不要知道比較好' // 你還是，不要知道比較好'; 1%
+   }
+
+   else if (num < 99 && num >= 94)
+   {
+      reply_index = '大凶'; // 大凶 5%
+   }
+
+   else if (num < 94 && num >= 84)
+   {
+      reply_index = '小凶'; // 小凶 10%
+   }
+   else if (num < 84 && num >= 64)
+   {
+      reply_index = '凶'; // 凶 20%
+   }
+
+   else if (num == 50)
+   {
+      reply_index = '這應該不關我的事'; // 這應該不關我的事 1%
+   }
+
+   else
+   {
+      reply_index = '末吉'; // 末吉 28%
+   }
+
+
 	  
-    return '今天指揮官的運勢應該是......，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
-  }
+    return DisplayName + rplyArr + '的運勢應該是......，' + reply_index + '(' + num + ')吧。';
+  }// rplyArr[Dice(rplyArr.length)-1]
 
   //沒有觸發關鍵字則是這個
   else
@@ -856,46 +1125,5 @@ function YabasoReply(inputStr)
     let rplyArr = [];
     return rplyArr[Dice(rplyArr.length)-1];
   }
-/*
-function question(inputStr)
-{
-	
-//以下就是LineBot選單的格式
-var guess={
-    type: 'template',
-    altText: 'this is a confirm template',
-    template: 
-    {
-        type: 'buttons',
-        text: '按下選單可以控制物聯網裝置！\n輸入?可以再看到這個選單！',
-        actions: 
-	[
-		{
-			type: 'postback',
-			label: '石頭',
-			text: '石頭'
-		},
-		{
-			type: 'postback',
-			label: '剪刀',
-			text: '剪刀'
-		},
-		{
-			type: 'postback',
-			label: '布',
-			text: '布'
-		}
-	]
-    }
-};
-
-function fingerguess(inputStr){
-	if(inputStr.match('猜拳') != null)
-		let reply =  guess;
-	return reply;
-}
-*/
-	
-
 
 }
